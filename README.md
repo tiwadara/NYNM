@@ -1,5 +1,7 @@
 # resolution
 
+![Flutter CI](https://github.com/tiwadara/NYNM/workflows/Flutter%20CI/badge.svg)
+
 A new Flutter application.
 
 ## Getting Started
