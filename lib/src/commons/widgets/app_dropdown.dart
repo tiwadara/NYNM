@@ -20,7 +20,7 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
     "Five"
   ];
   String _selected;
-  List<dynamic> data = new List<dynamic>();
+  List<dynamic> data = new List<dynamic>.empty();
 
   @override
   void initState() {

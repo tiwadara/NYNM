@@ -6,7 +6,7 @@ import 'package:resolution/src/resolutions/models/resolution.dart';
 
 class StorageService {
   Future<List<Resolution>> deleteResolution(Resolution resolution) async {
-    List<Resolution> resolutions = List<Resolution>();
+    List<Resolution> resolutions = List<Resolution>.empty();
     final resolutionBox = await Hive.openBox(StorageConstants.USER_RESOLUTIONS);
     resolutionBox.delete(resolution);
     resolutions.addAll(resolutionBox.values.map((e) => e));
