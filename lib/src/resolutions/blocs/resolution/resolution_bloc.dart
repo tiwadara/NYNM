@@ -24,10 +24,10 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
       try {
         var response = await resolutionService.saveResolution(event.resolution);
         if (response is Resolution) {
-                yield ResolutionSaved(response);
-              } else {
-                yield ErrorWithMessageState(AppStringConstants.saveFailed);
-              }
+          yield ResolutionSaved(response);
+        } else {
+          yield ErrorWithMessageState(AppStringConstants.saveFailed);
+        }
       } catch (e) {
         yield ErrorWithMessageState(AppStringConstants.saveFailed);
       }

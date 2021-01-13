@@ -1,7 +1,5 @@
-import 'package:resolution/src/app.dart';
-
 void main() {
-  var app = App();
+  // var app = App();
 
   // **************  WIDGET  TESTS ***********************
 

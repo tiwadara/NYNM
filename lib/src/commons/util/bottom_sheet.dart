@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void displayBottomSheet(BuildContext context, Widget bottomSheetContent, {VoidCallback onDismiss}) {
+void displayBottomSheet(BuildContext context, Widget bottomSheetContent,
+    {VoidCallback onDismiss}) {
   showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(

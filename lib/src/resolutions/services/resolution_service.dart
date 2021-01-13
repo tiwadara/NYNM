@@ -12,7 +12,7 @@ class ResolutionService {
 
   Future<Resolution> getResolution(Resolution resolution) async {
     return Resolution(name: "One");
-    return storageService.getResolution(resolution);
+    // return storageService.getResolution(resolution);
   }
 
   Future<void> clearAllResolutions() async {

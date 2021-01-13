@@ -45,9 +45,7 @@ class _AppCounterState extends State<AppCounter> {
                 blurRadius: 15.0,
                 offset: Offset(0, 8)),
           ]),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-          children: [
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
         SizedBox(
           width: 50.w,
           child: Center(
@@ -71,7 +69,7 @@ class _AppCounterState extends State<AppCounter> {
                 decoration: BoxDecoration(
                   color: AppColors.accentDark,
                   borderRadius:
-                  BorderRadius.only(topRight: Radius.circular(10)),
+                      BorderRadius.only(topRight: Radius.circular(10)),
                   border: Border.all(color: AppColors.white, width: 1),
                 ),
                 child: Text(
@@ -93,7 +91,7 @@ class _AppCounterState extends State<AppCounter> {
                 decoration: BoxDecoration(
                   color: AppColors.accentDark,
                   borderRadius:
-                  BorderRadius.only(bottomRight: Radius.circular(10)),
+                      BorderRadius.only(bottomRight: Radius.circular(10)),
                   border: Border.all(color: AppColors.white, width: 1),
                 ),
                 child: Text(

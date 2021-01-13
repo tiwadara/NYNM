@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchFilter extends StatelessWidget {
-  const SearchFilter({Key key, this.hint, this.focusNode, this.onResultUpdated, this.onClicked})
+  const SearchFilter(
+      {Key key,
+      this.hint,
+      this.focusNode,
+      this.onResultUpdated,
+      this.onClicked})
       : super(key: key);
 
   final String hint;
@@ -20,7 +25,7 @@ class SearchFilter extends StatelessWidget {
     return Center(
       child: Material(
         child: AppTextInput(
-          focusNode: focusNode,
+            focusNode: focusNode,
             onTap: onClicked,
             keyboardType: TextInputType.text,
             icon: Icons.search,

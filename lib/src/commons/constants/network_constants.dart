@@ -1,15 +1,11 @@
-
-
 class NetworkConstants {
   static const String BASE_URL = "https://recurp.herokuapp.com/api/v1";
-
 
   static const String AUTH = "$BASE_URL/auth";
   static const String REQUEST_OTP = "$AUTH/otp";
   static const String LOGIN = "$AUTH/login";
   static const String GOOGLE_LOGIN = "$AUTH/social-login";
   static const String PASSWORD_RESET = "$AUTH/forgot-password";
-
 
   static const String USER = "$BASE_URL/users";
   static const String SIGN_UP = "$USER/signup";
@@ -32,8 +28,6 @@ class NetworkConstants {
   static const String PAYMENT_METHODS = "$ACCOUNT/payment-methods";
   static const String SAVED_CARDS = "$PAYMENT_METHODS/me";
 
-  static const String TRANSACTIONS ="$BASE_URL/transactions";
-  static const String USER_TRANSACTIONS ="$TRANSACTIONS/me";
-
-
+  static const String TRANSACTIONS = "$BASE_URL/transactions";
+  static const String USER_TRANSACTIONS = "$TRANSACTIONS/me";
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 
@@ -52,7 +51,7 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
             color: AppColors.borderGrey,
             size: 25, // Add this
           ),
-          items:  data == null
+          items: data == null
               ? _dropdownValues
                   .map((value) => DropdownMenuItem(
                         child: Padding(
@@ -66,7 +65,7 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
                         value: value,
                       ))
                   .toList()
-              :  data
+              : data
                   .map((value) => DropdownMenuItem(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10.0),
@@ -83,7 +82,7 @@ class _RoundedBorderDropdownState extends State<RoundedBorderDropdown> {
             setState(() {
               _selected = value;
             });
-             widget.onChange(value);
+            widget.onChange(value);
           },
           isExpanded: false,
           value: _selected,

@@ -2,14 +2,16 @@ import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class PrimaryButton extends StatefulWidget {
-  const PrimaryButton(
-      {Key key,
-      this.icon,
-      @required this.label,
-      this.width,this.color,
-      @required this.onPressed, })
-      : super(key: key);
+  const PrimaryButton({
+    Key key,
+    this.icon,
+    @required this.label,
+    this.width,
+    this.color,
+    @required this.onPressed,
+  }) : super(key: key);
 
   final double width;
   final VoidCallback onPressed;
@@ -22,10 +24,11 @@ class PrimaryButton extends StatefulWidget {
 }
 
 class _PrimaryButtonState extends State<PrimaryButton> {
-
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, designSize: Size(AppConstants.screenWidth, AppConstants.screenHeight), allowFontScaling: false);
+    ScreenUtil.init(context,
+        designSize: Size(AppConstants.screenWidth, AppConstants.screenHeight),
+        allowFontScaling: false);
     return SizedBox(
       height: 46.h,
       width: widget.width ?? 330.w,
@@ -56,9 +59,12 @@ class _PrimaryButtonState extends State<PrimaryButton> {
 //                )
 //              :
             Align(
-                    child: Icon(widget.icon, size: 35,),
-                    alignment: Alignment.centerRight,
-                  ),
+              child: Icon(
+                widget.icon,
+                size: 35,
+              ),
+              alignment: Alignment.centerRight,
+            ),
           ],
         ),
       ),

@@ -27,8 +27,10 @@ main() {
       storageService.saveResolution(testResolution);
       verify(storageService.saveResolution(testResolution));
 
-      when(storageService.saveResolution(testResolution)).thenAnswer((_) => Future.value(testResolution));
-      expect(await storageService.saveResolution(testResolution), testResolution);
+      when(storageService.saveResolution(testResolution))
+          .thenAnswer((_) => Future.value(testResolution));
+      expect(
+          await storageService.saveResolution(testResolution), testResolution);
     });
 
     test('Constructing Service should find correct dependencies', () {
@@ -37,9 +39,11 @@ main() {
     });
 
     test('add resolution', () async {
-      Resolution newResolution = await resolutionService.saveResolution(Resolution(name: "One"));
+      Resolution newResolution =
+          await resolutionService.saveResolution(Resolution(name: "One"));
       expect(newResolution.name, "One");
-      Resolution savedResolution = await resolutionService.getResolution(Resolution(name: "One"));
+      Resolution savedResolution =
+          await resolutionService.getResolution(Resolution(name: "One"));
       expect(savedResolution.name, "One");
     });
   });
@@ -66,21 +70,23 @@ main() {
     group('createResolution -', () {
       Resolution testResolution = Resolution();
 
-      blocTest('emits [SavingResolution, ResolutionSaved] when SaveResolution is added and saveResolution succeeds',
+      blocTest(
+        'emits [SavingResolution, ResolutionSaved] when SaveResolution is added and saveResolution succeeds',
         build: () {
-        when(resolutionService.saveResolution(testResolution)).thenAnswer((_) => Future.value(testResolution),);
+          when(resolutionService.saveResolution(testResolution)).thenAnswer(
+            (_) => Future.value(testResolution),
+          );
           return resolutionBloc;
         },
         act: (bloc) => bloc.add(SaveResolution(testResolution)),
-        expect: [
-          SavingResolution(),
-          ResolutionSaved(testResolution)
-        ],
+        expect: [SavingResolution(), ResolutionSaved(testResolution)],
       );
 
-      blocTest('emits [SavingResolution, ErrorWithMessageState] when SaveResolution is added and saveResolution fails',
+      blocTest(
+        'emits [SavingResolution, ErrorWithMessageState] when SaveResolution is added and saveResolution fails',
         build: () {
-          when(resolutionService.saveResolution(testResolution)).thenThrow((_) => Future.value("testResolution"));
+          when(resolutionService.saveResolution(testResolution))
+              .thenThrow((_) => Future.value("testResolution"));
           return resolutionBloc;
         },
         act: (bloc) => bloc.add(SaveResolution(testResolution)),
@@ -89,8 +95,6 @@ main() {
           ErrorWithMessageState(AppStringConstants.saveFailed)
         ],
       );
-
     });
-
   });
 }

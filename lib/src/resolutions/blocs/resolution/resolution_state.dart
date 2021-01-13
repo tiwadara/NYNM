@@ -9,10 +9,12 @@ class InitialResolutionState extends ResolutionState {
   @override
   List<Object> get props => [];
 }
+
 class SavingResolution extends ResolutionState {
   @override
   List<Object> get props => [];
 }
+
 @immutable
 class ResolutionSaved extends ResolutionState {
   final Resolution resolution;

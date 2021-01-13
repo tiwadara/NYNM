@@ -116,7 +116,8 @@ class _NewResolutionState extends State<NewResolution> {
                                   onSelect: (AppDropDown2Item value) {
                                     resolution.interval = value.code;
                                     _selectedInterval = value;
-                                    print("seellle" + _selectedInterval.toString());
+                                    print("seellle" +
+                                        _selectedInterval.toString());
                                     watchFormState();
                                   },
                                   selected: _selectedInterval,

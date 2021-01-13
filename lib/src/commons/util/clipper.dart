@@ -31,12 +31,13 @@ class BottomWaveClipper extends CustomClipper<Path> {
 class TopWaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-
     Path path = Path();
     path.moveTo(0, size.height);
     path.lineTo(0, 0);
-    path.quadraticBezierTo(size.width / 4, size.height * 0.8, size.width/2, size.height * 0.5);
-    path.quadraticBezierTo(size.width - 50, size.height * 0.10, size.width, size.height);
+    path.quadraticBezierTo(
+        size.width / 4, size.height * 0.8, size.width / 2, size.height * 0.5);
+    path.quadraticBezierTo(
+        size.width - 50, size.height * 0.10, size.width, size.height);
     path.lineTo(size.width, size.height);
 
     path.close();

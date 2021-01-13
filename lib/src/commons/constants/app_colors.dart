@@ -9,7 +9,7 @@ class AppColors {
   static Color accentLight = Color(0xff8BC34A);
   static Color white = Colors.white;
   static Color mainBlack = Color(0xff1C1C19);
-  static Color textColor = Color (0xff515C6F);
+  static Color textColor = Color(0xff515C6F);
   static Color borderGrey = Color(0xffCBCDCE);
   static Color grey = Color(0xFF727C8E);
   static Color windowColor = Color(0xffF5F6F8);

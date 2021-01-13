@@ -18,14 +18,14 @@ class NumericKeyboard extends StatefulWidget {
 
   NumericKeyboard(
       {Key key,
-        @required this.onKeyboardTap,
-        this.textColor = Colors.black,
-        this.rightButtonFn,
-        this.textSize = 26,
-        this.rightIcon,
-        this.leftButtonFn,
-        this.leftIcon,
-        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
+      @required this.onKeyboardTap,
+      this.textColor = Colors.black,
+      this.rightButtonFn,
+      this.textSize = 26,
+      this.rightIcon,
+      this.leftButtonFn,
+      this.leftIcon,
+      this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
       : super(key: key);
 
   @override
@@ -39,7 +39,8 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context,
         designSize: Size(AppConstants.screenWidth, AppConstants.screenHeight),
-        allowFontScaling: false);    return Container(
+        allowFontScaling: false);
+    return Container(
       padding: const EdgeInsets.only(left: 32, right: 32, top: 20),
       alignment: Alignment.center,
       child: Column(
@@ -108,7 +109,7 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
           child: Text(
             value,
             style: TextStyle(
-                fontSize:  widget.textSize,
+                fontSize: widget.textSize,
                 fontWeight: FontWeight.bold,
                 color: widget.textColor),
           ),

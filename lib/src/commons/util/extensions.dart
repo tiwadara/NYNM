@@ -1,6 +1,5 @@
 part of strings;
 
-
 const int _ASCII_END = 0x7f;
 
 const int _UNICODE_END = 0x10ffff;

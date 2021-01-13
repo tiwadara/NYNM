@@ -30,6 +30,9 @@ dependencies:
   equatable: ^1.2.5
   flutter_bloc: ^6.1.1
   flutter_screenutil: ^3.2.0
+  flutter_local_notifications: ^3.0.3
+
+
   intl: ^0.16.1
   flutter:
     sdk: flutter

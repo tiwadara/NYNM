@@ -11,9 +11,11 @@ class AppDropDown2Item extends Equatable {
 
   AppDropDown2Item(this.code, this.title, {this.meta});
   @override
-  List<Object> get props => [code, title, meta,];
-
-
+  List<Object> get props => [
+        code,
+        title,
+        meta,
+      ];
 }
 
 class Spinner extends StatefulWidget {
@@ -23,15 +25,12 @@ class Spinner extends StatefulWidget {
   final AppDropDown2Item selected;
   final String helpText;
 
-
-
-  Spinner({
-    @required this.items,
-    @required this.onSelect,
-    this.hintText = "",
-    @required this.selected,
-    this.helpText = ""
-  });
+  Spinner(
+      {@required this.items,
+      @required this.onSelect,
+      this.hintText = "",
+      @required this.selected,
+      this.helpText = ""});
 
   @override
   _SpinnerState createState() => _SpinnerState();
@@ -71,9 +70,9 @@ class _SpinnerState extends State<Spinner> {
                 color: AppColors.borderGrey,
                 size: 25, // Add this
               ),
-              value:  widget.selected,
+              value: widget.selected,
               style: TextStyle(color: AppColors.textColor, fontSize: 14),
-              items: widget.items.map((AppDropDown2Item e){
+              items: widget.items.map((AppDropDown2Item e) {
                 return DropdownMenuItem(
                   child: Container(
                     child: Text(
@@ -84,7 +83,7 @@ class _SpinnerState extends State<Spinner> {
                   ),
                   value: e,
                 );
-              } ).toList(),
+              }).toList(),
               onChanged: widget.onSelect,
               hint: Text(widget.hintText),
             ),

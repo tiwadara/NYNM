@@ -11,7 +11,7 @@ class _$Injector extends Injector {
   void configure() {
     final KiwiContainer container = KiwiContainer();
     container.registerSingleton((c) => ResolutionService(c<StorageService>()));
-    container.registerSingleton((c) => NavigationService());
     container.registerSingleton((c) => StorageService());
+    container.registerSingleton((c) => NotificationService());
   }
 }

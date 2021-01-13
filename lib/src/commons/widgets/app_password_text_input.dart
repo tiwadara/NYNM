@@ -10,7 +10,12 @@ class PasswordTextInput extends StatefulWidget {
   final String label;
 
   const PasswordTextInput(
-      {Key key, this.validator, this.onChanged, this.helperText, this.label, this. style})
+      {Key key,
+      this.validator,
+      this.onChanged,
+      this.helperText,
+      this.label,
+      this.style})
       : super(key: key);
 
   @override
@@ -32,7 +37,7 @@ class _PasswordTextInputState extends State<PasswordTextInput> {
         validator: widget.validator,
         onChanged: widget.onChanged,
         obscureText: _obscureText,
-        style : widget.style,
+        style: widget.style,
         decoration: InputDecoration(
             border: InputBorder.none,
             labelStyle: TextStyle(color: AppColors.grey),
