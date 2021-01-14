@@ -1,5 +1,1 @@
-enum Status {
-  NEW,
-  STARTED,
-  COMPLETED
-}
+enum Status { NEW, STARTED, COMPLETED }

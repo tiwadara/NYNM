@@ -1,13 +1,13 @@
-part of 'resolution_bloc.dart';
+part of '../../../tasks/blocs/todo/to_do_bloc.dart';
 
 @immutable
-abstract class ResolutionEvent extends Equatable {
-  const ResolutionEvent();
+abstract class ToDoEvent extends Equatable {
+  const ToDoEvent();
 }
 
 @immutable
-class SaveResolution extends ResolutionEvent {
-  final Resolution resolution;
+class SaveResolution extends ToDoEvent {
+  final Task resolution;
 
   SaveResolution(this.resolution);
   @override
@@ -15,8 +15,8 @@ class SaveResolution extends ResolutionEvent {
 }
 
 @immutable
-class UpdateResolutionStatus extends ResolutionEvent {
-  final Resolution resolution;
+class UpdateResolutionStatus extends ToDoEvent {
+  final Task resolution;
   final int index;
 
   UpdateResolutionStatus(this.resolution, this.index);
@@ -25,7 +25,7 @@ class UpdateResolutionStatus extends ResolutionEvent {
 }
 
 @immutable
-class GetResolutions extends ResolutionEvent {
+class GetResolutions extends ToDoEvent {
   @override
   List<Object> get props => [];
 }

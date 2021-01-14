@@ -5,8 +5,8 @@ import 'package:kiwi/kiwi.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/provider_setup.dart';
-import 'package:resolution/src/resolutions/screens/resolutions.dart';
 import 'package:resolution/src/route_manager.dart';
+import 'package:resolution/src/resolutions/screens/resolutions.dart';
 
 class App extends StatefulWidget {
   @override
@@ -16,7 +16,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    final NotificationService _notificationService = KiwiContainer().resolve<NotificationService>();
+    final NotificationService _notificationService =
+        KiwiContainer().resolve<NotificationService>();
     _notificationService.initializing();
     _notificationService.periodicNotification(RepeatInterval.everyMinute);
     super.initState();
@@ -31,7 +32,7 @@ class _AppState extends State<App> {
         child: MaterialApp(
           title: 'Cronpay',
           theme: ThemeData(
-              fontFamily: 'Avenir',
+              fontFamily: 'Proxima',
               primaryColor: AppColors.accentDark,
               accentColor: AppColors.primary,
               visualDensity: VisualDensity.adaptivePlatformDensity,

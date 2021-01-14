@@ -1,56 +1,56 @@
-part of 'resolution_bloc.dart';
+part of '../../../tasks/blocs/todo/to_do_bloc.dart';
 
 @immutable
-abstract class ResolutionState extends Equatable {
-  const ResolutionState();
+abstract class ToDoState extends Equatable {
+  const ToDoState();
 }
 
-class InitialResolutionState extends ResolutionState {
+class InitialResolutionState extends ToDoState {
   @override
   List<Object> get props => [];
 }
 
-class SavingResolution extends ResolutionState {
+class SavingResolution extends ToDoState {
   @override
   List<Object> get props => [];
 }
 
-class LoadingResolution extends ResolutionState {
+class LoadingResolution extends ToDoState {
   @override
   List<Object> get props => [];
 }
 
-class UpdatingResolution extends ResolutionState {
+class UpdatingResolution extends ToDoState {
   @override
   List<Object> get props => [];
 }
 
 @immutable
-class ResolutionSaved extends ResolutionState {
-  final Resolution resolution;
+class ResolutionSaved extends ToDoState {
+  final Task resolution;
   ResolutionSaved(this.resolution);
   @override
   List<Object> get props => [resolution];
 }
 
 @immutable
-class ResolutionUpdated extends ResolutionState {
-  final Resolution resolution;
+class ResolutionUpdated extends ToDoState {
+  final Task resolution;
   ResolutionUpdated(this.resolution);
   @override
   List<Object> get props => [resolution];
 }
 
 @immutable
-class ResolutionsReceived extends ResolutionState {
-  final List<Resolution> resolutions;
+class ResolutionsReceived extends ToDoState {
+  final List<Task> resolutions;
   ResolutionsReceived(this.resolutions);
   @override
   List<Object> get props => [resolutions];
 }
 
 @immutable
-class ErrorWithMessageState extends ResolutionState {
+class ErrorWithMessageState extends ToDoState {
   final String error;
   ErrorWithMessageState(this.error);
   @override

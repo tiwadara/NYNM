@@ -1,7 +1,6 @@
-import 'package:resolution/src/resolutions/screens/new_resolution.dart';
-import 'package:resolution/src/resolutions/screens/resolutions.dart';
+import 'package:resolution/src/tasks/screens/new_resolution.dart';
+import 'package:resolution/src/tasks/screens/resolutions.dart';
 
 class Routes {
-  static const resolutions = Resolutions.routeName;
-  static const newResolution = NewResolution.routeName;
+  static const tasks = Tasks.routeName;
 }

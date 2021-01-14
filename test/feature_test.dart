@@ -18,10 +18,9 @@ class MockHiveInterface extends Mock implements HiveInterface {}
 class MockHiveBox extends Mock implements Box {}
 
 main() {
-  // **************  UNIT TESTS ***********************
+  // **************  FEATURE TESTS ***********************
 
-  // unit test Services
-  group('ResolutionService Test | ', () {
+  group('Feature Test | ', () {
     TaskService resolutionService;
     StorageService storageService;
 
@@ -67,56 +66,6 @@ main() {
           .thenAnswer((_) => Future.value(List<Task>()));
       List<Task> resolutions = await resolutionService.getAllResolution();
       expect(resolutions, []);
-    });
-  });
-
-  // unit test blocs
-
-  group('ResolutionBloc Test -', () {
-    TaskService resolutionService;
-    ToDoBloc resolutionBloc;
-
-    setUp(() {
-      resolutionService = MockResolutionService();
-      resolutionBloc = ToDoBloc(resolutionService);
-    });
-
-    tearDown(() {
-      resolutionBloc?.close();
-    });
-
-    test('initial state is correct', () {
-      expect(resolutionBloc.initialState, InitialResolutionState());
-    });
-
-    group('createResolution -', () {
-      Task testResolution = Task();
-
-      blocTest(
-        'emits [SavingResolution, ResolutionSaved] when SaveResolution is added and saveResolution succeeds',
-        build: () {
-          when(resolutionService.saveResolution(testResolution)).thenAnswer(
-            (_) => Future.value(testResolution),
-          );
-          return resolutionBloc;
-        },
-        act: (bloc) => bloc.add(SaveResolution(testResolution)),
-        expect: [SavingResolution(), ResolutionSaved(testResolution)],
-      );
-
-      blocTest(
-        'emits [SavingResolution, ErrorWithMessageState] when SaveResolution is added and saveResolution fails',
-        build: () {
-          when(resolutionService.saveResolution(testResolution))
-              .thenThrow((_) => Future.value("testResolution"));
-          return resolutionBloc;
-        },
-        act: (bloc) => bloc.add(SaveResolution(testResolution)),
-        expect: [
-          SavingResolution(),
-          ErrorWithMessageState(AppStringConstants.saveFailed)
-        ],
-      );
     });
   });
 }

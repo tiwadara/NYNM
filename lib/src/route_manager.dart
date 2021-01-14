@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:resolution/src/commons/constants/routes_constant.dart';
-import 'package:resolution/src/resolutions/screens/new_resolution.dart';
-import 'package:resolution/src/resolutions/screens/resolutions.dart';
+import 'package:resolution/src/tasks/screens/resolutions.dart';
 
 class RouteManager {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.resolutions:
-        return MaterialPageRoute(builder: (_) => Resolutions());
-      case Routes.newResolution:
-        return MaterialPageRoute(builder: (_) => NewResolution());
+      case Routes.tasks:
+        return MaterialPageRoute(builder: (_) => Tasks());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

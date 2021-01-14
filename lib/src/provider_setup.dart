@@ -3,8 +3,15 @@ import 'package:kiwi/kiwi.dart';
 import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
 import 'package:resolution/src/resolutions/services/resolution_service.dart';
+import 'package:resolution/src/tasks/blocs/todo/to_do_bloc.dart';
+import 'package:resolution/src/tasks/services/task_service.dart';
 
 List<BlocProvider> blocProviders = [
+  BlocProvider<ToDoBloc>(
+    lazy: false,
+    create: (dynamic context) =>
+        ToDoBloc(RepositoryProvider.of<TaskService>(context)),
+  ),
   BlocProvider<ResolutionBloc>(
     lazy: false,
     create: (dynamic context) =>
@@ -15,6 +22,9 @@ List<BlocProvider> blocProviders = [
 final KiwiContainer kiwiContainer = KiwiContainer();
 
 List<RepositoryProvider> repositoryProviders = [
+  RepositoryProvider<TaskService>(
+    create: (context) => kiwiContainer.resolve<TaskService>(),
+  ),
   RepositoryProvider<ResolutionService>(
     create: (context) => kiwiContainer.resolve<ResolutionService>(),
   ),

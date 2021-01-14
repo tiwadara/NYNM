@@ -17,29 +17,27 @@ import 'package:resolution/src/commons/widgets/primary_button.dart';
 import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
 import 'package:resolution/src/resolutions/models/resolution.dart';
 
-class NewResolution extends StatefulWidget {
+class NewResolutionBottomSheet extends StatefulWidget {
   static const String routeName = '/newResolution';
-  NewResolution();
+  NewResolutionBottomSheet();
 
   @override
-  _NewResolutionState createState() => _NewResolutionState();
+  _NewResolutionBottomSheetState createState() =>
+      _NewResolutionBottomSheetState();
 }
 
-class _NewResolutionState extends State<NewResolution> {
+class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
   ResolutionBloc _resolutionBloc;
   final _formKey = GlobalKey<FormState>();
   var isButtonDisabled = true;
   var hasSwitchedBeneficiary = false;
+  DateTime _selectedYear = DateTime(2021);
   Resolution resolution = Resolution();
-  AppDropDown2Item _selectedInterval;
-  List<AppDropDown2Item> _intervals = [];
 
   @override
   void initState() {
     _resolutionBloc = BlocProvider.of<ResolutionBloc>(context);
-    _intervals.add(AppDropDown2Item("DAILY", "Daily"));
-    _intervals.add(AppDropDown2Item("WEEKLY", "Weekly"));
-    _intervals.add(AppDropDown2Item("MONTHLY", "Monthly"));
+    resolution.year = _selectedYear.year.toString();
     super.initState();
   }
 
@@ -89,40 +87,38 @@ class _NewResolutionState extends State<NewResolution> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          AppTextInput(
-                            hintText: 'Add Title e.g  Save \$5 daily',
-                            labelText: "Title",
-                            onChanged: (text) {
-                              resolution.name = text;
-                              watchFormState();
-                            },
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: AppColors.shadow,
+                                      blurRadius: 15.0,
+                                      offset: Offset(0, 8)),
+                                ]),
+                            height: 120,
+                            child: YearPicker(
+                                selectedDate: _selectedYear,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(3000),
+                                onChanged: (text) {
+                                  _selectedYear = text;
+                                  resolution.year = text.year.toString();
+                                  watchFormState();
+                                }),
+                          ),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           AppTextInput(
                             keyboardType: TextInputType.text,
-                            labelText: "Notes",
+                            labelText: "Motto",
                             onChanged: (text) {
-                              resolution.description = text;
+                              resolution.motto = text;
                               watchFormState();
                             },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Spinner(
-                                  hintText: "Select Interval",
-                                  onSelect: (AppDropDown2Item value) {
-                                    resolution.interval = value.code;
-                                    _selectedInterval = value;
-                                    print("seellle" +
-                                        _selectedInterval.toString());
-                                    watchFormState();
-                                  },
-                                  selected: _selectedInterval,
-                                  items: _intervals,
-                                ),
-                              )
-                            ],
                           ),
                           SizedBox(
                             height: 10.h,
@@ -172,10 +168,6 @@ class _NewResolutionState extends State<NewResolution> {
     } else {
       setState(() => isButtonDisabled = false);
     }
-  }
-
-  void gotoNextScreen() {
-    Navigator.pushReplacementNamed(context, Routes.resolutions);
   }
 
   void saveResolution() {

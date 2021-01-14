@@ -4,26 +4,26 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
-import 'package:resolution/src/resolutions/models/resolution.dart';
-import 'package:resolution/src/resolutions/services/resolution_service.dart';
+import 'package:resolution/src/tasks/models/task.dart';
+import 'package:resolution/src/tasks/services/task_service.dart';
 
-part 'resolution_event.dart';
-part 'resolution_state.dart';
+part 'to_do_event.dart';
+part 'to_do_state.dart';
 
-class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
-  final ResolutionService resolutionService;
+class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
+  final TaskService resolutionService;
 
-  ResolutionBloc(this.resolutionService) : super(InitialResolutionState());
+  ToDoBloc(this.resolutionService) : super(InitialResolutionState());
 
-  ResolutionState get initialState => InitialResolutionState();
+  ToDoState get initialState => InitialResolutionState();
 
   @override
-  Stream<ResolutionState> mapEventToState(ResolutionEvent event) async* {
+  Stream<ToDoState> mapEventToState(ToDoEvent event) async* {
     if (event is SaveResolution) {
       yield SavingResolution();
       try {
         var response = await resolutionService.saveResolution(event.resolution);
-        if (response is Resolution) {
+        if (response is Task) {
           yield ResolutionSaved(response);
         } else {
           yield ErrorWithMessageState(AppStringConstants.saveFailed);
@@ -35,7 +35,7 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
       yield LoadingResolution();
       try {
         var response = await resolutionService.getAllResolution();
-        if (response is List<Resolution>) {
+        if (response.isNotEmpty) {
           yield ResolutionsReceived(response);
         } else {
           yield ErrorWithMessageState(AppStringConstants.saveFailed);
@@ -48,7 +48,7 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
       try {
         var response = await resolutionService.updateResolution(
             event.resolution, event.index);
-        if (response is Resolution) {
+        if (response is Task) {
           yield ResolutionUpdated(response);
         } else {
           yield ErrorWithMessageState(AppStringConstants.saveFailed);

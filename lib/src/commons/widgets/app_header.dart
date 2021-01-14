@@ -31,7 +31,7 @@ class Header extends StatelessWidget {
                 Container(
                   height: headerHeight,
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: AppColors.primaryDark,
                   ),
                 ),
                 Padding(

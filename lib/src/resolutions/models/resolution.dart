@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:resolution/src/commons/constants/storage_constants.dart';
+import 'package:resolution/src/tasks/models/task.dart';
 
 part 'resolution.g.dart';
 
@@ -8,15 +9,13 @@ part 'resolution.g.dart';
 @HiveType(typeId: StorageConstants.TYPE_RESOLUTION)
 class Resolution {
   @HiveField(0)
-  String status;
+  String year;
   @HiveField(1)
-  String name;
+  String motto;
   @HiveField(2)
-  String description;
-  @HiveField(3)
-  String interval;
+  List<Task> tasks;
 
-  Resolution({this.status, this.name, this.description, this.interval});
+  Resolution({this.year, this.motto, List<Task> tasks}) : tasks = [];
 
   factory Resolution.fromJson(Map<String, dynamic> json) =>
       _$ResolutionFromJson(json);
@@ -24,7 +23,7 @@ class Resolution {
   Map<String, dynamic> toJson() => _$ResolutionToJson(this);
 
   bool checkIfAnyIsNull() {
-    List searchProperties = [name, description, interval];
+    List searchProperties = [year, motto];
     return searchProperties.contains(null) || searchProperties.contains("");
   }
 }

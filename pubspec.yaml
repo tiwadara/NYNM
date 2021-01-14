@@ -62,13 +62,6 @@ flutter:
 
   fonts:
 
-    - family: Montserrat
-      fonts:
-        - asset: assets/fonts/montserrat/Montserrat-Regular.otf
-        - asset: assets/fonts/montserrat/Montserrat-Bold.otf
-        - asset: assets/fonts/montserrat/Montserrat-Light.otf
-        - asset: assets/fonts/montserrat/Montserrat-Thin.otf
-
     - family: Gibson
       fonts:
         - asset: assets/fonts/gibson/Gibson-Regular.ttf
@@ -79,8 +72,4 @@ flutter:
     - family: Proxima
       fonts:
         - asset: assets/fonts/proxima/ProximaNova-Regular.otf
-
-    - family: Avenir
-      fonts:
-        - asset: assets/fonts/avenir/Avenir-Medium.ttf
 
