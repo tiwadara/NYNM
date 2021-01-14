@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
+import 'package:resolution/src/commons/constants/app_strings.dart';
 import 'package:resolution/src/commons/constants/routes_constant.dart';
 import 'package:resolution/src/commons/widgets/app_horizontal_line.dart';
 import 'package:resolution/src/commons/widgets/app_loader.dart';
@@ -32,13 +33,10 @@ class _NewResolutionState extends State<NewResolution> {
   Resolution resolution = Resolution();
   AppDropDown2Item _selectedInterval;
   List<AppDropDown2Item> _intervals = [];
-  TextEditingController dateTextController = TextEditingController();
-  TextEditingController endDateTextController = TextEditingController();
 
   @override
   void initState() {
     _resolutionBloc = BlocProvider.of<ResolutionBloc>(context);
-    resolution.increment = 1;
     _intervals.add(AppDropDown2Item("DAILY", "Daily"));
     _intervals.add(AppDropDown2Item("WEEKLY", "Weekly"));
     _intervals.add(AppDropDown2Item("MONTHLY", "Monthly"));
@@ -92,7 +90,7 @@ class _NewResolutionState extends State<NewResolution> {
                       child: Column(
                         children: [
                           AppTextInput(
-                            hintText: 'Add Title e.g  Kids monthly stipends',
+                            hintText: 'Add Title e.g  Save \$5 daily',
                             labelText: "Title",
                             onChanged: (text) {
                               resolution.name = text;
@@ -142,13 +140,15 @@ class _NewResolutionState extends State<NewResolution> {
                           icon: Icons.chevron_right_rounded,
                           label: 'SAVE RESOLUTION',
                           onPressed:
-                              isButtonDisabled ? null : () => createEvent());
+                              isButtonDisabled ? null : () => saveResolution());
                     },
                     listener: (context, state) {
                       if (state is ErrorWithMessageState) {
                         Navigator.pop(context);
                         AppSnackBar().show(message: state.error);
                       } else if (state is ResolutionSaved) {
+                        Navigator.pop(context);
+                        AppSnackBar().show(message: "Resolution Created");
                         Navigator.pop(context);
                       }
                     },
@@ -178,20 +178,13 @@ class _NewResolutionState extends State<NewResolution> {
     Navigator.pushReplacementNamed(context, Routes.resolutions);
   }
 
-  void createEvent() {
+  void saveResolution() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      showOverlay(context, "Creating Schedule");
+      showOverlay(context, "Creating Resolution");
       _resolutionBloc.add(SaveResolution(resolution));
     } else {
-      AppSnackBar().show(message: "Please, correct invalid fields");
+      AppSnackBar().show(message: AppStringConstants.formError);
     }
-  }
-
-  @override
-  void dispose() {
-    endDateTextController.dispose();
-    dateTextController.dispose();
-    super.dispose();
   }
 }

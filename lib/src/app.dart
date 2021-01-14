@@ -16,8 +16,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    final NotificationService _notificationService =
-        KiwiContainer().resolve<NotificationService>();
+    final NotificationService _notificationService = KiwiContainer().resolve<NotificationService>();
     _notificationService.initializing();
     _notificationService.periodicNotification(RepeatInterval.everyMinute);
     super.initState();

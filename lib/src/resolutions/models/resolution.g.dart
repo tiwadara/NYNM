@@ -21,14 +21,13 @@ class ResolutionAdapter extends TypeAdapter<Resolution> {
       name: fields[1] as String,
       description: fields[2] as String,
       interval: fields[3] as String,
-      increment: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Resolution obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.status)
       ..writeByte(1)
@@ -36,9 +35,7 @@ class ResolutionAdapter extends TypeAdapter<Resolution> {
       ..writeByte(2)
       ..write(obj.description)
       ..writeByte(3)
-      ..write(obj.interval)
-      ..writeByte(4)
-      ..write(obj.increment);
+      ..write(obj.interval);
   }
 
   @override
@@ -62,7 +59,6 @@ Resolution _$ResolutionFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     description: json['description'] as String,
     interval: json['interval'] as String,
-    increment: json['increment'] as int,
   );
 }
 
@@ -72,5 +68,4 @@ Map<String, dynamic> _$ResolutionToJson(Resolution instance) =>
       'name': instance.name,
       'description': instance.description,
       'interval': instance.interval,
-      'increment': instance.increment,
     };

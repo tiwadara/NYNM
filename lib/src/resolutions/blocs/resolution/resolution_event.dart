@@ -16,9 +16,6 @@ class SaveResolution extends ResolutionEvent {
 
 @immutable
 class GetResolutions extends ResolutionEvent {
-  final int pageKey;
-  final int pageSize;
-  GetResolutions({this.pageKey, this.pageSize});
   @override
-  List<Object> get props => [pageKey, pageSize];
+  List<Object> get props => [];
 }

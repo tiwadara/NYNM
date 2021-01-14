@@ -9,12 +9,9 @@ class NotificationService {
 
   void initializing() async {
     androidInitializationSettings = AndroidInitializationSettings('app_icon');
-    iosInitializationSettings = IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    initializationSettings = InitializationSettings(
-        android: androidInitializationSettings, iOS: iosInitializationSettings);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+    iosInitializationSettings = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    initializationSettings = InitializationSettings(android: androidInitializationSettings, iOS: iosInitializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
   Future onSelectNotification(String payLoad) {
@@ -25,7 +22,10 @@ class NotificationService {
   }
 
   Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {}
+      int id, String title, String body, String payload) async {
+    print("notification receine" + payload.toString());
+
+  }
 
   Future<void> periodicNotification(RepeatInterval repeatInterval) async {
     await flutterLocalNotificationsPlugin.periodicallyShow(

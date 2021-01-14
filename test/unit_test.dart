@@ -1,7 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
+import 'package:resolution/src/commons/constants/storage_constants.dart';
 import 'package:resolution/src/commons/services/storage_service.dart';
 import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
 import 'package:resolution/src/resolutions/models/resolution.dart';
@@ -10,6 +12,10 @@ import 'package:resolution/src/resolutions/services/resolution_service.dart';
 class MockStorageService extends Mock implements StorageService {}
 
 class MockResolutionService extends Mock implements ResolutionService {}
+
+class MockHiveInterface extends Mock implements HiveInterface {}
+
+class MockHiveBox extends Mock implements Box {}
 
 main() {
   // **************  UNIT TESTS ***********************
@@ -38,15 +44,28 @@ main() {
       expect(storageService != null, true);
     });
 
-    test('add resolution', () async {
-      Resolution newResolution =
-          await resolutionService.saveResolution(Resolution(name: "One"));
-      expect(newResolution.name, "One");
-      Resolution savedResolution =
-          await resolutionService.getResolution(Resolution(name: "One"));
-      expect(savedResolution.name, "One");
+    test('save resolution', () async {
+      Resolution testResolution = Resolution(name: "Two");
+      when(storageService.saveResolution(any)).thenAnswer((_) => Future.value(testResolution));
+      Resolution newResolution = await resolutionService.saveResolution(Resolution(name: "One"));
+      expect(newResolution, testResolution);
     });
+
+    test('get resolution', () async {
+      Resolution testResolution = Resolution(name: "Two");
+      when(storageService.getResolution(any)).thenAnswer((_) => Future.value(testResolution));
+      Resolution savedResolution = await resolutionService.getResolution(Resolution(name: "One"));
+      expect(savedResolution, testResolution);
+    });
+
+    test('get resolutions', () async {
+      when(storageService.getAllResolutions()).thenAnswer((_) => Future.value(List<Resolution>()));
+      List<Resolution> resolutions = await resolutionService.getAllResolution();
+      expect(resolutions, []);
+    });
+
   });
+
 
   // unit test blocs
 

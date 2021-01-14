@@ -15,15 +15,8 @@ class Resolution {
   String description;
   @HiveField(3)
   String interval;
-  @HiveField(4)
-  int increment;
 
-  Resolution(
-      {this.status,
-      this.name,
-      this.description,
-      this.interval,
-      this.increment});
+  Resolution({this.status, this.name, this.description, this.interval});
 
   factory Resolution.fromJson(Map<String, dynamic> json) =>
       _$ResolutionFromJson(json);
@@ -31,7 +24,7 @@ class Resolution {
   Map<String, dynamic> toJson() => _$ResolutionToJson(this);
 
   bool checkIfAnyIsNull() {
-    List searchProperties = [name, description];
+    List searchProperties = [name, description, interval];
     return searchProperties.contains(null) || searchProperties.contains("");
   }
 }

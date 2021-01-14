@@ -6,20 +6,16 @@ class ResolutionService {
   ResolutionService(this.storageService);
 
   Future<Resolution> saveResolution(Resolution resolution) async {
-    return Resolution(name: "One");
-    // return storageService.saveResolution(resolution);
+    return storageService.saveResolution(resolution);
   }
 
   Future<Resolution> getResolution(Resolution resolution) async {
-    return Resolution(name: "One");
-    // return storageService.getResolution(resolution);
+    return storageService.getResolution(resolution);
   }
 
-  Future<void> clearAllResolutions() async {
-    storageService.clearAllResolutions();
+  Future<List<Resolution>> getAllResolution() async {
+    print("callll" + toString());
+    return await storageService.getAllResolutions();
   }
 
-  Future<List<Resolution>> removeResolution(Resolution resolution) async {
-    return storageService.deleteResolution(resolution);
-  }
 }

@@ -6,10 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
+import 'package:resolution/src/commons/constants/routes_constant.dart';
+import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/util/bottom_sheet.dart';
 import 'package:resolution/src/commons/widgets/app_header.dart';
+import 'package:resolution/src/commons/widgets/app_widget_transition.dart';
 import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
+import 'package:resolution/src/resolutions/models/resolution.dart';
 import 'package:resolution/src/resolutions/screens/new_resolution.dart';
+import 'package:resolution/src/resolutions/widgets/resolution_list_item.dart';
 
 class Resolutions extends StatefulWidget {
   static const String routeName = '/resolutions';
@@ -19,22 +24,16 @@ class Resolutions extends StatefulWidget {
   _ResolutionsState createState() => _ResolutionsState();
 }
 
-class _ResolutionsState extends State<Resolutions>
-    with TickerProviderStateMixin {
-  final attributeValueTextController = TextEditingController();
-  AnimationController _animationController;
+class _ResolutionsState extends State<Resolutions> {
   ResolutionBloc _resolutionBloc;
+  NotificationService _notificationService;
+  List<Resolution> _resolutions = [];
 
   @override
   void initState() {
     _resolutionBloc = BlocProvider.of<ResolutionBloc>(context);
+    _notificationService = RepositoryProvider.of<NotificationService>(context);
     _resolutionBloc.add(GetResolutions());
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _animationController.forward();
     super.initState();
   }
 
@@ -77,72 +76,40 @@ class _ResolutionsState extends State<Resolutions>
                       SizedBox(
                         height: 12.h,
                       ),
-                      // CalendarCarouselExample2(),
                       SizedBox(
                         height: 12.h,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "THIS MONTH",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              // Navigator.pushNamed(context, Routes.allResolutions);
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "All Events ",
-                                  style: TextStyle(color: AppColors.grey),
-                                ),
-                                Icon(
-                                  Icons.chevron_right,
-                                  size: 12,
-                                  color: AppColors.grey,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      // BlocBuilder<ResolutionBloc, ResolutionState>(
-                      //     buildWhen: (previous, current) => current is EventsReturned
-                      //     builder: (context, state) {
-                      //       if (state is EventsReturned) {
-                      //         _resolutions = state.events.toList();
-                      //         var groupedEvents =
-                      //             groupEventsForCurrentMonth(_resolutions);
-                      //         if (_resolutions.isEmpty || groupedEvents.isEmpty) {
-                      //           return buildEmptyEventContainer(context);
-                      //         } else {
-                      //           return ShowUp(
-                      //             child: Padding(
-                      //               padding: const EdgeInsets.only(top: 15.0),
-                      //               child: EventList(events: groupedEvents),
-                      //             ),
-                      //           );
-                      //         }
-                      //       }
-                      //       if (state is EventsInSelectedMonth) {
-                      //         // _events = state.events.toList();
-                      //         var groupedEvents =
-                      //             groupEvents(_resolutions, state.month);
-                      //         if (_resolutions.isEmpty || groupedEvents.isEmpty) {
-                      //           return buildEmptyEventContainer(context);
-                      //         } else {
-                      //           return ShowUp(
-                      //             child: Padding(
-                      //               padding: const EdgeInsets.only(top: 15.0),
-                      //               child: EventList(events: groupedEvents),
-                      //             ),
-                      //           );
-                      //         }
-                      //       } else if (state is GettingEvents) {}
-                      //       return buildEmptyEventContainer(context);
-                      //     }),
+                      BlocBuilder<ResolutionBloc, ResolutionState>(
+                          builder: (context, state) {
+                            if (state is ResolutionSaved) {
+                              _resolutionBloc.add(GetResolutions());
+                            }
+                            if (state is ResolutionsReceived) {
+                              _resolutions = state.resolutions.toList();
+                              if (_resolutions.isEmpty) {
+                                return buildEmptyEventContainer(context);
+                              } else {
+                                return ShowUp(
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _resolutions.length,
+                                    itemBuilder: (context, position) {
+                                      return ResolutionListItem(
+                                        icon: Icons.add_circle_outline,
+                                        resolution: _resolutions[position],
+                                        color: Colors.white,
+                                        position: position,
+                                        onPressed: () {},
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                            }
+                            return buildEmptyEventContainer(context);
+                          }),
                       SizedBox(
                         height: 100.h,
                       ),
@@ -166,7 +133,7 @@ class _ResolutionsState extends State<Resolutions>
               color: AppColors.primaryDark,
             ),
             onPressed: () {
-              // Navigator.pushNamed(context, Routes.newEvent);
+              displayBottomSheet(context, NewResolution());
             },
           ),
           SizedBox(
@@ -174,7 +141,7 @@ class _ResolutionsState extends State<Resolutions>
           ),
           Center(
               child: Text(
-            "No upcoming events, create one",
+            "No resolution :-( , create one",
             textAlign: TextAlign.center,
             style: TextStyle(),
           )),

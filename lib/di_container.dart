@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/services/storage_service.dart';
