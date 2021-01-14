@@ -1,6 +1,7 @@
 # resolution
 
 ![Flutter CI](https://github.com/tiwadara/NYNM/workflows/Flutter%20CI/badge.svg)
+[![codecov](https://codecov.io/gh/tiwadara/NYNM/branch/master/graph/badge.svg?token=A8maCNMGjL)](https://codecov.io/gh/tiwadara/NYNM)
 
 A new Flutter application.
 
