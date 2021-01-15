@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:resolution/src/commons/services/storage_service.dart';
-import 'package:resolution/src/tasks/models/task.dart';
 import 'package:resolution/src/tasks/services/task_service.dart';
 
 class MockStorageService extends Mock implements StorageService {}
@@ -21,7 +20,6 @@ main() {
     StorageService storageService;
 
     setUp(() async {
-      Task testResolution = Task();
       storageService = MockStorageService();
     });
 
