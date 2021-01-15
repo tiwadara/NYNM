@@ -3,15 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
-import 'package:resolution/src/commons/constants/storage_constants.dart';
+import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/services/storage_service.dart';
-import 'package:resolution/src/tasks/blocs/todo/to_do_bloc.dart';
+import 'package:resolution/src/resolutions/models/resolution.dart';
+import 'package:resolution/src/resolutions/services/resolution_service.dart';
+import 'package:resolution/src/tasks/blocs/task/task_bloc.dart';
 import 'package:resolution/src/tasks/models/task.dart';
 import 'package:resolution/src/tasks/services/task_service.dart';
 
 class MockStorageService extends Mock implements StorageService {}
 
-class MockResolutionService extends Mock implements TaskService {}
+class MockResolutionService extends Mock implements ResolutionService {}
+
+class MockNotificationService extends Mock implements NotificationService {}
 
 class MockHiveInterface extends Mock implements HiveInterface {}
 
@@ -22,21 +26,14 @@ main() {
 
   // unit test Services
   group('ResolutionService Test | ', () {
-    TaskService resolutionService;
+    ResolutionService resolutionService;
     StorageService storageService;
+    Box box;
 
     setUp(() async {
-      Task testResolution = Task();
       storageService = MockStorageService();
-      resolutionService = TaskService(storageService);
-
-      storageService.saveResolution(testResolution);
-      verify(storageService.saveResolution(testResolution));
-
-      when(storageService.saveResolution(testResolution))
-          .thenAnswer((_) => Future.value(testResolution));
-      expect(
-          await storageService.saveResolution(testResolution), testResolution);
+      box = MockHiveBox();
+      resolutionService = ResolutionService(storageService);
     });
 
     test('Constructing Service should find correct dependencies', () {
@@ -45,27 +42,16 @@ main() {
     });
 
     test('save resolution', () async {
-      Task testResolution = Task(name: "Two");
-      when(storageService.saveResolution(any))
-          .thenAnswer((_) => Future.value(testResolution));
-      Task newResolution =
-          await resolutionService.saveResolution(Task(name: "One"));
+      Resolution testResolution = Resolution(motto: "Two", year: 2021);
+      when(storageService.openBox(any)).thenAnswer((_) => Future.value(box));
+      when(box.get(any)).thenAnswer((_) => Future.value(testResolution));
+      Resolution newResolution = await resolutionService
+          .saveResolution(Resolution(motto: "One", year: 2021));
       expect(newResolution, testResolution);
     });
 
-    test('get resolution', () async {
-      Task testResolution = Task(name: "Two");
-      when(storageService.getResolution(any))
-          .thenAnswer((_) => Future.value(testResolution));
-      Task savedResolution =
-          await resolutionService.getResolution(Task(name: "One"));
-      expect(savedResolution, testResolution);
-    });
-
     test('get resolutions', () async {
-      when(storageService.getAllResolutions())
-          .thenAnswer((_) => Future.value(List<Task>()));
-      List<Task> resolutions = await resolutionService.getAllResolution();
+      List<Resolution> resolutions = await resolutionService.getAllResolution();
       expect(resolutions, []);
     });
   });
@@ -74,11 +60,11 @@ main() {
 
   group('ResolutionBloc Test -', () {
     TaskService resolutionService;
-    ToDoBloc resolutionBloc;
+    TaskBloc resolutionBloc;
 
     setUp(() {
-      resolutionService = MockResolutionService();
-      resolutionBloc = ToDoBloc(resolutionService);
+      // resolutionService = MockResolutionService();
+      resolutionBloc = TaskBloc(resolutionService);
     });
 
     tearDown(() {
@@ -91,29 +77,30 @@ main() {
 
     group('createResolution -', () {
       Task testResolution = Task();
+      int year = 2020;
 
       blocTest(
         'emits [SavingResolution, ResolutionSaved] when SaveResolution is added and saveResolution succeeds',
         build: () {
-          when(resolutionService.saveResolution(testResolution)).thenAnswer(
+          when(resolutionService.saveTask(testResolution, year)).thenAnswer(
             (_) => Future.value(testResolution),
           );
           return resolutionBloc;
         },
-        act: (bloc) => bloc.add(SaveResolution(testResolution)),
-        expect: [SavingResolution(), ResolutionSaved(testResolution)],
+        act: (bloc) => bloc.add(SaveTask(testResolution, year)),
+        expect: [SavingTask(), TaskSaved()],
       );
 
       blocTest(
         'emits [SavingResolution, ErrorWithMessageState] when SaveResolution is added and saveResolution fails',
         build: () {
-          when(resolutionService.saveResolution(testResolution))
+          when(resolutionService.saveTask(testResolution, year))
               .thenThrow((_) => Future.value("testResolution"));
           return resolutionBloc;
         },
-        act: (bloc) => bloc.add(SaveResolution(testResolution)),
+        act: (bloc) => bloc.add(SaveTask(testResolution, year)),
         expect: [
-          SavingResolution(),
+          SavingTask(),
           ErrorWithMessageState(AppStringConstants.saveFailed)
         ],
       );

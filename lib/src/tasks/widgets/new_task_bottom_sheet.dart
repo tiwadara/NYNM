@@ -9,34 +9,37 @@ import 'package:resolution/src/commons/constants/app_constants.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
 import 'package:resolution/src/commons/constants/routes_constant.dart';
 import 'package:resolution/src/commons/widgets/app_horizontal_line.dart';
-import 'package:resolution/src/commons/widgets/app_loader.dart';
 import 'package:resolution/src/commons/widgets/app_snackbar.dart';
 import 'package:resolution/src/commons/widgets/app_spinner.dart';
 import 'package:resolution/src/commons/widgets/app_text_view.dart';
 import 'package:resolution/src/commons/widgets/primary_button.dart';
-import 'package:resolution/src/tasks/blocs/todo/to_do_bloc.dart';
+import 'package:resolution/src/resolutions/models/resolution.dart';
+import 'package:resolution/src/tasks/blocs/task/task_bloc.dart';
 import 'package:resolution/src/tasks/models/task.dart';
 
 class NewTaskBottomSheet extends StatefulWidget {
+  NewTaskBottomSheet(this.resolution);
+  final Resolution resolution;
+
   @override
   _NewTaskBottomSheetState createState() => _NewTaskBottomSheetState();
 }
 
 class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
-  ToDoBloc _resolutionBloc;
+  TaskBloc _taskBloc;
   final _formKey = GlobalKey<FormState>();
   var isButtonDisabled = true;
   var hasSwitchedBeneficiary = false;
-  Task resolution = Task();
+  Task task = Task();
   AppDropDown2Item _selectedInterval;
   List<AppDropDown2Item> _intervals = [];
 
   @override
   void initState() {
-    _resolutionBloc = BlocProvider.of<ToDoBloc>(context);
+    _taskBloc = BlocProvider.of<TaskBloc>(context);
     _intervals.add(AppDropDown2Item("DAILY", "Daily"));
     _intervals.add(AppDropDown2Item("WEEKLY", "Weekly"));
-    _intervals.add(AppDropDown2Item("MONTHLY", "Monthly"));
+    _intervals.add(AppDropDown2Item("MONTHLY", "Every Minute"));
     super.initState();
   }
 
@@ -58,7 +61,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
             height: 20.h,
           ),
           Text(
-            "New Resolution",
+            "New Task",
             style: TextStyle(
                 fontSize: 20,
                 color: AppColors.textColor,
@@ -90,7 +93,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             hintText: 'Add Title e.g  Save \$5 daily',
                             labelText: "Title",
                             onChanged: (text) {
-                              resolution.name = text;
+                              task.name = text;
                               watchFormState();
                             },
                           ),
@@ -98,7 +101,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                             keyboardType: TextInputType.text,
                             labelText: "Notes",
                             onChanged: (text) {
-                              resolution.description = text;
+                              task.description = text;
                               watchFormState();
                             },
                           ),
@@ -109,10 +112,8 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                                 child: Spinner(
                                   hintText: "Select Interval",
                                   onSelect: (AppDropDown2Item value) {
-                                    resolution.interval = value.code;
+                                    task.interval = value.code;
                                     _selectedInterval = value;
-                                    print("seellle" +
-                                        _selectedInterval.toString());
                                     watchFormState();
                                   },
                                   selected: _selectedInterval,
@@ -131,21 +132,19 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                   SizedBox(
                     height: 28.h,
                   ),
-                  BlocConsumer<ToDoBloc, ToDoState>(
+                  BlocConsumer<TaskBloc, TaskState>(
                     builder: (context, state) {
                       return PrimaryButton(
                           icon: Icons.chevron_right_rounded,
-                          label: 'SAVE RESOLUTION',
+                          label: 'SAVE TASK',
                           onPressed:
-                              isButtonDisabled ? null : () => saveResolution());
+                              isButtonDisabled ? null : () => saveTask());
                     },
                     listener: (context, state) {
                       if (state is ErrorWithMessageState) {
-                        Navigator.pop(context);
                         AppSnackBar().show(message: state.error);
-                      } else if (state is ResolutionSaved) {
-                        Navigator.pop(context);
-                        AppSnackBar().show(message: "Resolution Created");
+                      } else if (state is TaskSaved) {
+                        AppSnackBar().show(message: "Task Created");
                         Navigator.pop(context);
                       }
                     },
@@ -163,8 +162,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
   }
 
   void watchFormState() {
-    print("event" + resolution.toJson().toString());
-    if (resolution.checkIfAnyIsNull()) {
+    if (task.checkIfAnyIsNull()) {
       setState(() => isButtonDisabled = true);
     } else {
       setState(() => isButtonDisabled = false);
@@ -175,11 +173,10 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
     Navigator.pushReplacementNamed(context, Routes.tasks);
   }
 
-  void saveResolution() {
+  void saveTask() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      showOverlay(context, "Creating Resolution");
-      _resolutionBloc.add(SaveResolution(resolution));
+      _taskBloc.add(SaveTask(task, widget.resolution.year));
     } else {
       AppSnackBar().show(message: AppStringConstants.formError);
     }

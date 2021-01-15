@@ -15,16 +15,6 @@ class SaveResolution extends ResolutionEvent {
 }
 
 @immutable
-class UpdateResolutionStatus extends ResolutionEvent {
-  final Resolution resolution;
-  final int index;
-
-  UpdateResolutionStatus(this.resolution, this.index);
-  @override
-  List<Object> get props => [resolution, index];
-}
-
-@immutable
 class GetResolutions extends ResolutionEvent {
   @override
   List<Object> get props => [];

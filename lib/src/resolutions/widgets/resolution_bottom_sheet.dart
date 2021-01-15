@@ -7,11 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
-import 'package:resolution/src/commons/constants/routes_constant.dart';
 import 'package:resolution/src/commons/widgets/app_horizontal_line.dart';
 import 'package:resolution/src/commons/widgets/app_loader.dart';
 import 'package:resolution/src/commons/widgets/app_snackbar.dart';
-import 'package:resolution/src/commons/widgets/app_spinner.dart';
 import 'package:resolution/src/commons/widgets/app_text_view.dart';
 import 'package:resolution/src/commons/widgets/primary_button.dart';
 import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
@@ -37,7 +35,7 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
   @override
   void initState() {
     _resolutionBloc = BlocProvider.of<ResolutionBloc>(context);
-    resolution.year = _selectedYear.year.toString();
+    resolution.year = _selectedYear.year;
     super.initState();
   }
 
@@ -99,13 +97,14 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
                                       offset: Offset(0, 8)),
                                 ]),
                             height: 120,
+                            // ignore: deprecated_member_use
                             child: YearPicker(
                                 selectedDate: _selectedYear,
                                 firstDate: DateTime(2020),
                                 lastDate: DateTime(3000),
                                 onChanged: (text) {
                                   _selectedYear = text;
-                                  resolution.year = text.year.toString();
+                                  resolution.year = text.year;
                                   watchFormState();
                                 }),
                           ),
@@ -162,7 +161,7 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
   }
 
   void watchFormState() {
-    print("event" + resolution.toJson().toString());
+    print("event" + resolution.toString());
     if (resolution.checkIfAnyIsNull()) {
       setState(() => isButtonDisabled = true);
     } else {

@@ -43,19 +43,6 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
       } catch (e) {
         yield ErrorWithMessageState(AppStringConstants.saveFailed);
       }
-    } else if (event is UpdateResolutionStatus) {
-      yield UpdatingResolution();
-      try {
-        var response = await resolutionService.updateResolution(
-            event.resolution, event.index);
-        if (response is Resolution) {
-          yield ResolutionUpdated(response);
-        } else {
-          yield ErrorWithMessageState(AppStringConstants.saveFailed);
-        }
-      } catch (e) {
-        yield ErrorWithMessageState(AppStringConstants.saveFailed);
-      }
     }
   }
 }

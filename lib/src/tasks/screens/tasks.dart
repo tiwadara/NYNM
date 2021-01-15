@@ -6,33 +6,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
-import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/util/bottom_sheet.dart';
 import 'package:resolution/src/commons/widgets/app_header.dart';
 import 'package:resolution/src/commons/widgets/app_widget_transition.dart';
-import 'package:resolution/src/tasks/blocs/todo/to_do_bloc.dart';
-import 'package:resolution/src/tasks/models/task.dart';
-import 'package:resolution/src/tasks/screens/new_resolution.dart';
-import 'package:resolution/src/tasks/widgets/resolution_list_item.dart';
+import 'package:resolution/src/resolutions/models/resolution.dart';
+import 'package:resolution/src/tasks/blocs/task/task_bloc.dart';
+import 'package:resolution/src/tasks/widgets/new_task_bottom_sheet.dart';
+import 'package:resolution/src/tasks/widgets/task_list_item.dart';
 
 class Tasks extends StatefulWidget {
   static const String routeName = '/tasks';
-  Tasks();
+  Tasks(this.resolution);
+  final Resolution resolution;
 
   @override
   _TasksState createState() => _TasksState();
 }
 
 class _TasksState extends State<Tasks> {
-  ToDoBloc _resolutionBloc;
-  NotificationService _notificationService;
-  List<Task> _resolutions = [];
+  TaskBloc _taskBloc;
+  List<dynamic> _tasks = [];
 
   @override
   void initState() {
-    _resolutionBloc = BlocProvider.of<ToDoBloc>(context);
-    _notificationService = RepositoryProvider.of<NotificationService>(context);
-    _resolutionBloc.add(GetResolutions());
+    _taskBloc = BlocProvider.of<TaskBloc>(context);
+    _taskBloc.add(GetTasks(widget.resolution.year));
     super.initState();
   }
 
@@ -49,7 +47,7 @@ class _TasksState extends State<Tasks> {
             color: AppColors.white,
           ),
           onPressed: () {
-            displayBottomSheet(context, NewTaskBottomSheet());
+            displayBottomSheet(context, NewTaskBottomSheet(widget.resolution));
           },
         ),
         backgroundColor: AppColors.windowColor,
@@ -57,14 +55,7 @@ class _TasksState extends State<Tasks> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Header(
-              previous: Container(),
               title: "New Year, New Me",
-              next: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.notifications,
-                    color: AppColors.white,
-                  )),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -78,17 +69,17 @@ class _TasksState extends State<Tasks> {
                       SizedBox(
                         height: 12.h,
                       ),
-                      BlocBuilder<ToDoBloc, ToDoState>(
+                      BlocBuilder<TaskBloc, TaskState>(
                           buildWhen: (previous, current) =>
-                              current is ResolutionsReceived ||
-                              current is ResolutionSaved,
+                              current is TaskListReceived ||
+                              current is TaskSaved,
                           builder: (context, state) {
-                            if (state is ResolutionSaved) {
-                              _resolutionBloc.add(GetResolutions());
+                            if (state is TaskSaved) {
+                              _taskBloc.add(GetTasks(widget.resolution.year));
                             }
-                            if (state is ResolutionsReceived) {
-                              _resolutions = state.resolutions.toList();
-                              if (_resolutions.isEmpty) {
+                            if (state is TaskListReceived) {
+                              _tasks = state.tasks.toList();
+                              if (_tasks.isEmpty) {
                                 return buildEmptyEventContainer(context);
                               } else {
                                 return ShowUp(
@@ -96,11 +87,12 @@ class _TasksState extends State<Tasks> {
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _resolutions.length,
+                                    itemCount: _tasks.length,
                                     itemBuilder: (context, position) {
                                       return ResolutionListItem(
                                         icon: Icons.add_circle_outline,
-                                        resolution: _resolutions[position],
+                                        task: _tasks[position],
+                                        year: widget.resolution.year,
                                         color: Colors.white,
                                         position: position,
                                         onPressed: () {},
@@ -135,7 +127,8 @@ class _TasksState extends State<Tasks> {
               color: AppColors.primaryDark,
             ),
             onPressed: () {
-              displayBottomSheet(context, NewTaskBottomSheet());
+              displayBottomSheet(
+                  context, NewTaskBottomSheet(widget.resolution));
             },
           ),
           SizedBox(
@@ -143,7 +136,7 @@ class _TasksState extends State<Tasks> {
           ),
           Center(
               child: Text(
-            "No resolution :-( , create one",
+            "No tasks yet :-( , create one",
             textAlign: TextAlign.center,
             style: TextStyle(),
           )),

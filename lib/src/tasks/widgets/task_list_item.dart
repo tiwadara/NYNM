@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
-import 'package:resolution/src/tasks/blocs/todo/to_do_bloc.dart';
+import 'package:resolution/src/tasks/blocs/task/task_bloc.dart';
 import 'package:resolution/src/tasks/models/task.dart';
 
 class ResolutionListItem extends StatefulWidget {
@@ -11,12 +11,14 @@ class ResolutionListItem extends StatefulWidget {
       @required this.color,
       @required this.onPressed,
       @required this.position,
-      @required this.resolution})
+      @required this.year,
+      @required this.task})
       : super(key: key);
 
   final VoidCallback onPressed;
   final Color color;
-  final Task resolution;
+  final Task task;
+  final int year;
   final int position;
   final IconData icon;
 
@@ -25,23 +27,24 @@ class ResolutionListItem extends StatefulWidget {
 }
 
 class _ResolutionListItemState extends State<ResolutionListItem> {
-  ToDoBloc _resolutionBloc;
-  Task _updatedResolution = Task();
+  TaskBloc _resolutionBloc;
+  Task _updatedTask = Task();
+  bool _value;
   @override
   void initState() {
-    _resolutionBloc = BlocProvider.of<ToDoBloc>(context);
-    _updatedResolution = widget.resolution;
+    _resolutionBloc = BlocProvider.of<TaskBloc>(context);
+    _updatedTask = widget.task;
+    _value = widget.task.done;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("resolution" + widget.resolution.toJson().toString());
-    return BlocBuilder<ToDoBloc, ToDoState>(
-        buildWhen: (previous, current) => current is ResolutionUpdated,
+    return BlocBuilder<TaskBloc, TaskState>(
+        buildWhen: (previous, current) => current is TaskUpdated,
         builder: (context, state) {
-          if (state is ResolutionUpdated) {
-            _updatedResolution = state.resolution;
+          if (state is TaskUpdated) {
+            _updatedTask = state.task;
           }
           return Row(
             children: [
@@ -53,11 +56,14 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                 height: 20,
                 child: Checkbox(
                   onChanged: (bool value) {
-                    _updatedResolution.done = value;
-                    _resolutionBloc.add(UpdateResolutionStatus(
-                        widget.resolution, widget.position));
+                    setState(() {
+                      _value = value;
+                    });
+                    _updatedTask.done = value;
+                    _resolutionBloc.add(UpdateTaskStatus(
+                        _updatedTask, widget.year, widget.position));
                   },
-                  value: widget.resolution.done,
+                  value: _value,
                 ),
               ),
               SizedBox(
@@ -76,12 +82,12 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                widget.resolution.name,
+                                widget.task.name,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textColor),
                               ),
-                              Text(widget.resolution.description),
+                              Text(widget.task.description),
                             ],
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:resolution/src/tasks/models/task.dart';
 
 class NotificationService {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -8,7 +9,8 @@ class NotificationService {
   InitializationSettings initializationSettings;
 
   void initializing() async {
-    androidInitializationSettings = AndroidInitializationSettings('app_icon');
+    androidInitializationSettings =
+        AndroidInitializationSettings('ic_launcher');
     iosInitializationSettings = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(
@@ -29,17 +31,14 @@ class NotificationService {
     print("notification receine" + payload.toString());
   }
 
-  Future<void> periodicNotification(RepeatInterval repeatInterval) async {
+  Future<void> periodicNotification(Task task) async {
     await flutterLocalNotificationsPlugin.periodicallyShow(
         0,
-        'daily scheduled notification title',
-        'daily scheduled notification body',
-        repeatInterval,
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-              'daily notification channel id',
-              'daily notification channel name',
-              'daily notification description'),
+        task.name,
+        task.description,
+        task.getInterval(),
+        NotificationDetails(
+          android: AndroidNotificationDetails("0", task.name, task.description),
         ),
         androidAllowWhileIdle: true);
   }

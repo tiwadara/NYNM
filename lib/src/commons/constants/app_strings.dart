@@ -5,4 +5,5 @@ class AppStringConstants {
   static const String pay = 'Pay';
   static const String formError = 'Please, correct invalid fields';
   static const String saveFailed = 'Saving Failed';
+  static const String gettingFailed = 'Retrieving Failed';
 }

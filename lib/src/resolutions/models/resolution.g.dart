@@ -17,22 +17,19 @@ class ResolutionAdapter extends TypeAdapter<Resolution> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Resolution(
-      year: fields[0] as String,
+      year: fields[0] as int,
       motto: fields[1] as String,
-      tasks: (fields[2] as List)?.cast<Task>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Resolution obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.year)
       ..writeByte(1)
-      ..write(obj.motto)
-      ..writeByte(2)
-      ..write(obj.tasks);
+      ..write(obj.motto);
   }
 
   @override
@@ -52,12 +49,8 @@ class ResolutionAdapter extends TypeAdapter<Resolution> {
 
 Resolution _$ResolutionFromJson(Map<String, dynamic> json) {
   return Resolution(
-    year: json['year'] as String,
+    year: json['year'] as int,
     motto: json['motto'] as String,
-    tasks: (json['tasks'] as List)
-        ?.map(
-            (e) => e == null ? null : Task.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
   );
 }
 
@@ -65,5 +58,4 @@ Map<String, dynamic> _$ResolutionToJson(Resolution instance) =>
     <String, dynamic>{
       'year': instance.year,
       'motto': instance.motto,
-      'tasks': instance.tasks,
     };

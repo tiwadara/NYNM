@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
-import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/util/bottom_sheet.dart';
 import 'package:resolution/src/commons/widgets/app_header.dart';
 import 'package:resolution/src/commons/widgets/app_widget_transition.dart';
@@ -25,13 +24,11 @@ class Resolutions extends StatefulWidget {
 
 class _ResolutionsState extends State<Resolutions> {
   ResolutionBloc _resolutionBloc;
-  NotificationService _notificationService;
   List<Resolution> _resolutions = [];
 
   @override
   void initState() {
     _resolutionBloc = BlocProvider.of<ResolutionBloc>(context);
-    _notificationService = RepositoryProvider.of<NotificationService>(context);
     _resolutionBloc.add(GetResolutions());
     super.initState();
   }
@@ -92,7 +89,6 @@ class _ResolutionsState extends State<Resolutions> {
                             if (state is ResolutionSaved) {
                               _resolutionBloc.add(GetResolutions());
                             } else if (state is ResolutionsReceived) {
-                              print("resolutions received");
                               _resolutions = state.resolutions.toList();
                               if (_resolutions.isEmpty) {
                                 return buildEmptyEventContainer(context);

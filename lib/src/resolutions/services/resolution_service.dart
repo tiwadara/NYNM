@@ -22,16 +22,11 @@ class ResolutionService {
   }
 
   Future<List<Resolution>> getAllResolution() async {
-    print("get resolution called");
     List<Resolution> resolutions = List<Resolution>();
     Box resolutionBox =
         await storageService.openBox(StorageConstants.RESOLUTION_BOX);
     resolutions.addAll(resolutionBox.values.map((e) => e));
     return resolutions;
-  }
-
-  Future<Resolution> updateResolution(Resolution resolution, int index) async {
-    // return storageService.updateResolution(resolution, index);
   }
 
   Future<bool> resolutionExists(Resolution resolution) async {

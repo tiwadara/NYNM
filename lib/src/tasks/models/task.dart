@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:resolution/src/commons/constants/storage_constants.dart';
@@ -6,7 +7,7 @@ part 'task.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: StorageConstants.TYPE_TASK)
-class Task {
+class Task extends HiveObject {
   @HiveField(0)
   bool done;
   @HiveField(1)
@@ -26,5 +27,15 @@ class Task {
   bool checkIfAnyIsNull() {
     List searchProperties = [name, description, interval];
     return searchProperties.contains(null) || searchProperties.contains("");
+  }
+
+  getInterval() {
+    if (interval == "DAILY") {
+      return RepeatInterval.daily;
+    } else if (interval == "WEEKLY") {
+      return RepeatInterval.weekly;
+    } else if (interval == "MONTHLY") {
+      return RepeatInterval.everyMinute;
+    }
   }
 }
