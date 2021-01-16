@@ -12,9 +12,11 @@ class ResolutionService {
     if (await resolutionExists(resolution)) {
       throw Error();
     } else {
-      Box resolutionBox = await storageService.openBox(StorageConstants.RESOLUTION_BOX);
+      Box resolutionBox =
+          await storageService.openBox(StorageConstants.RESOLUTION_BOX);
       await resolutionBox.put(resolution.year, resolution);
-      savedResolution = resolutionBox.values.singleWhere((element) => element == resolution);
+      savedResolution =
+          resolutionBox.values.singleWhere((element) => element == resolution);
     }
     return savedResolution;
   }

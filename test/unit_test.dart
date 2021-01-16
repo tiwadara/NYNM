@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
 import 'package:resolution/src/commons/services/notification_service.dart';
 import 'package:resolution/src/commons/services/storage_service.dart';
-import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart'; 
+import 'package:resolution/src/resolutions/blocs/resolution/resolution_bloc.dart';
 import 'package:resolution/src/resolutions/models/resolution.dart';
 import 'package:resolution/src/resolutions/services/resolution_service.dart';
 import 'package:resolution/src/tasks/blocs/task/task_bloc.dart';
@@ -60,13 +60,6 @@ main() {
   //   });
   // });
 
-
-
-
-
-
-
-
   // unit test blocs
 
   group('ResolutionBloc Test -', () {
@@ -92,7 +85,8 @@ main() {
       blocTest(
         'emits [SavingResolution, ResolutionSaved] when SaveResolution is added and saveResolution succeeds',
         build: () {
-          when(resolutionService.saveResolution(testResolution)).thenAnswer((_) => Future.value(testResolution),
+          when(resolutionService.saveResolution(testResolution)).thenAnswer(
+            (_) => Future.value(testResolution),
           );
           return resolutionBloc;
         },
@@ -103,7 +97,8 @@ main() {
       blocTest(
         'emits [SavingResolution, ResolutionErrorState] when SaveResolution is added and saveResolution fails',
         build: () {
-          when(resolutionService.saveResolution(testResolution)).thenThrow((_) => Future.value("testResolution"));
+          when(resolutionService.saveResolution(testResolution))
+              .thenThrow((_) => Future.value("testResolution"));
           return resolutionBloc;
         },
         act: (bloc) => bloc.add(SaveResolution(testResolution)),
@@ -139,25 +134,24 @@ main() {
       blocTest(
         'emits [SavingTask, TaskSaved] when SaveTask is added and saveTask succeeds',
         build: () {
-          when(taskService.saveTask(testTask,year)).thenAnswer((_) => Future.value(testTask),
+          when(taskService.saveTask(testTask, year)).thenAnswer(
+            (_) => Future.value(testTask),
           );
           return taskBloc;
         },
-        act: (bloc) => bloc.add(SaveTask(testTask,year)),
+        act: (bloc) => bloc.add(SaveTask(testTask, year)),
         expect: [SavingTask(), TaskSaved()],
       );
 
       blocTest(
         'emits [SavingTask, TaskErrorState] when SaveTask is added and saveTask fails',
         build: () {
-          when(taskService.saveTask(testTask, year)).thenAnswer((_) => Future.value(null));
+          when(taskService.saveTask(testTask, year))
+              .thenAnswer((_) => Future.value(null));
           return taskBloc;
         },
         act: (bloc) => bloc.add(SaveTask(testTask, year)),
-        expect: [
-          SavingTask(),
-          TaskErrorState(AppStringConstants.saveFailed)
-        ],
+        expect: [SavingTask(), TaskErrorState(AppStringConstants.saveFailed)],
       );
     });
   });
