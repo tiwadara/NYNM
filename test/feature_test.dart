@@ -21,11 +21,8 @@ main() {
 
     setUp(() async {
       storageService = MockStorageService();
+      resolutionService = MockResolutionService();
     });
 
-    test('Constructing Service should find correct dependencies', () {
-      expect(resolutionService != null, true);
-      expect(storageService != null, true);
-    });
   });
 }
