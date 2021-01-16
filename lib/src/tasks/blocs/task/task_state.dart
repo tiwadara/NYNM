@@ -5,7 +5,7 @@ abstract class TaskState extends Equatable {
   const TaskState();
 }
 
-class InitialResolutionState extends TaskState {
+class InitialTaskState extends TaskState {
   @override
   List<Object> get props => [];
 }
@@ -49,9 +49,9 @@ class TaskListReceived extends TaskState {
 }
 
 @immutable
-class ErrorWithMessageState extends TaskState {
+class TaskErrorState extends TaskState {
   final String error;
-  ErrorWithMessageState(this.error);
+  TaskErrorState(this.error);
   @override
   List<Object> get props => [error];
 }

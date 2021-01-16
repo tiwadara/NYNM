@@ -50,9 +50,9 @@ class ResolutionsReceived extends ResolutionState {
 }
 
 @immutable
-class ErrorWithMessageState extends ResolutionState {
+class ResolutionErrorState extends ResolutionState {
   final String error;
-  ErrorWithMessageState(this.error);
+  ResolutionErrorState(this.error);
   @override
   List<Object> get props => [error];
 }

@@ -138,7 +138,7 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
                               isButtonDisabled ? null : () => saveResolution());
                     },
                     listener: (context, state) {
-                      if (state is ErrorWithMessageState) {
+                      if (state is ResolutionErrorState) {
                         Navigator.pop(context);
                         AppSnackBar().show(message: state.error);
                       } else if (state is ResolutionSaved) {

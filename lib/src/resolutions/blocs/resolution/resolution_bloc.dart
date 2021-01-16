@@ -26,10 +26,10 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
         if (response is Resolution) {
           yield ResolutionSaved(response);
         } else {
-          yield ErrorWithMessageState(AppStringConstants.saveFailed);
+          yield ResolutionErrorState(AppStringConstants.saveFailed);
         }
       } catch (e) {
-        yield ErrorWithMessageState(AppStringConstants.saveFailed);
+        yield ResolutionErrorState(AppStringConstants.saveFailed);
       }
     } else if (event is GetResolutions) {
       yield LoadingResolution();
@@ -38,10 +38,10 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
         if (response is List<Resolution>) {
           yield ResolutionsReceived(response);
         } else {
-          yield ErrorWithMessageState(AppStringConstants.saveFailed);
+          yield ResolutionErrorState(AppStringConstants.saveFailed);
         }
       } catch (e) {
-        yield ErrorWithMessageState(AppStringConstants.saveFailed);
+        yield ResolutionErrorState(AppStringConstants.saveFailed);
       }
     }
   }

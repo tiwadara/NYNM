@@ -13,9 +13,9 @@ part 'task_state.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final TaskService taskService;
 
-  TaskBloc(this.taskService) : super(InitialResolutionState());
+  TaskBloc(this.taskService) : super(InitialTaskState());
 
-  TaskState get initialState => InitialResolutionState();
+  TaskState get initialState => InitialTaskState();
 
   @override
   Stream<TaskState> mapEventToState(TaskEvent event) async* {
@@ -25,7 +25,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       if (response != null) {
         yield TaskSaved();
       } else {
-        yield ErrorWithMessageState(AppStringConstants.saveFailed);
+        yield TaskErrorState(AppStringConstants.saveFailed);
       }
     } else if (event is GetTasks) {
       yield LoadingTasks();
@@ -34,10 +34,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         if (response != null) {
           yield TaskListReceived(response, event.year);
         } else {
-          yield ErrorWithMessageState(AppStringConstants.gettingFailed);
+          yield TaskErrorState(AppStringConstants.gettingFailed);
         }
       } catch (e) {
-        yield ErrorWithMessageState(AppStringConstants.gettingFailed);
+        yield TaskErrorState(AppStringConstants.gettingFailed);
       }
     } else if (event is UpdateTaskStatus) {
       yield UpdatingResolution();
@@ -46,7 +46,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       if (response is Task) {
         yield TaskUpdated(response);
       } else {
-        yield ErrorWithMessageState(AppStringConstants.saveFailed);
+        yield TaskErrorState(AppStringConstants.saveFailed);
       }
     }
   }

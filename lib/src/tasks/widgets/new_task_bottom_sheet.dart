@@ -141,7 +141,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
                               isButtonDisabled ? null : () => saveTask());
                     },
                     listener: (context, state) {
-                      if (state is ErrorWithMessageState) {
+                      if (state is TaskErrorState) {
                         AppSnackBar().show(message: state.error);
                       } else if (state is TaskSaved) {
                         AppSnackBar().show(message: "Task Created");
