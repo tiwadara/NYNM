@@ -16,12 +16,8 @@ main() {
   // **************  FEATURE TESTS ***********************
 
   group('Feature Test | ', () {
-    TaskService resolutionService;
-    StorageService storageService;
 
     setUp(() async {
-      storageService = MockStorageService();
-      resolutionService = MockResolutionService();
     });
   });
 }
