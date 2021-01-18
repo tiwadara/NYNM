@@ -23,6 +23,5 @@ main() {
       storageService = MockStorageService();
       resolutionService = MockResolutionService();
     });
-
   });
 }
