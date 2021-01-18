@@ -213,10 +213,10 @@ main() {
       Task monthlyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "MONTHLY");
       Task weeklyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "WEEKLY");
       Task dailyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "DAILY");
-      Map<String, dynamic> testJson = {"done": true, "name": "test task name", "description": "test description", "interval": "test Interval"};
+      Map<String, dynamic> testTaskJson = {"done": true, "name": "test task name", "description": "test description", "interval": "test Interval"};
       test('expect exact value  when Model is passed  as json', () {
-        var newTaskObjectFromTestJson = Task.fromJson(testJson);
-        expect(newTaskObjectFromTestJson.toJson(), testJson);
+        var newTaskObjectFromTestJson = Task.fromJson(testTaskJson);
+        expect(newTaskObjectFromTestJson.toJson(), testTaskJson);
       });
       test('check if any value in a model is null', () {
         bool isNull = monthlyTestModel.checkIfAnyIsNull();

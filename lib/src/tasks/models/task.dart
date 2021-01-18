@@ -17,7 +17,7 @@ class Task extends HiveObject {
   @HiveField(3)
   String interval;
 
-  Task({bool done, this.name, this.description, this.interval}) : done = false;
+  Task({this.done, this.name, this.description, this.interval});
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
