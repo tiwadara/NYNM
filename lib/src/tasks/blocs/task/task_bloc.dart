@@ -55,4 +55,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     List tasks = await taskService.getAllTasks(year);
     return tasks.length;
   }
+
+  Future<int> getCompletedTaskCount(int year) async {
+    List tasks = await taskService.getAllTasks(year);
+    tasks= tasks.where((element) => element.done ?? false ).toList();
+    return tasks.length;
+  }
+
+  Future<Task> getTask(int year, int index) async {
+    Task task = await taskService.getTask(year, index);
+    return task;
+  }
 }

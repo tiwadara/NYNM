@@ -36,6 +36,7 @@ class _NewTaskBottomSheetState extends State<NewTaskBottomSheet> {
 
   @override
   void initState() {
+    // task.done = false;
     _taskBloc = BlocProvider.of<TaskBloc>(context);
     _intervals.add(AppDropDown2Item("DAILY", "Daily"));
     _intervals.add(AppDropDown2Item("WEEKLY", "Weekly"));

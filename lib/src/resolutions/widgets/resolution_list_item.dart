@@ -27,6 +27,7 @@ class ResolutionListItem extends StatefulWidget {
 
 class _ResolutionListItemState extends State<ResolutionListItem> {
   int _taskCount = 0;
+  int _completedTaskCount = 0;
   TaskBloc _taskBloc;
 
   @override
@@ -39,7 +40,15 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
   getCount() {
     _taskBloc.getTaskCount(widget.resolution.year).then((value) {
       setState(() {
+        print("taskss" + value.toString());
         _taskCount = value;
+      });
+      return null;
+    });
+    _taskBloc.getCompletedTaskCount(widget.resolution.year).then((value) {
+      setState(() {
+        print("commm" + value.toString());
+        _completedTaskCount = value;
       });
       return null;
     });
@@ -84,16 +93,12 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                       ],
                     ),
                     BlocListener<TaskBloc, TaskState>(
-                      listenWhen: (previous, current) => current is TaskSaved,
+                      listenWhen: (previous, current) => current is TaskSaved || current is TaskUpdated,
                       listener: (context, state) {
                         if (state is TaskSaved) {
-                          _taskBloc
-                              .getTaskCount(widget.resolution.year)
-                              .then((value) {
-                            setState(() {
-                              _taskCount = value;
-                            });
-                          });
+                        return getCount();
+                        } else if (state is TaskUpdated) {
+                          return getCount();
                         }
                       },
                       child: Container(),
@@ -115,12 +120,24 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                     SizedBox(
                       width: 30,
                     ),
-                    Text(
-                      _taskCount.toString() + " tasks",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryDark),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _taskCount.toString() + " tasks",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryDark),
+                        ),
+                        Text(
+                         '${(_completedTaskCount/_taskCount * 100) ?? 0.floor()}' + "% done",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryDark),
+                        ),
+                      ],
                     )
                   ],
                 ),

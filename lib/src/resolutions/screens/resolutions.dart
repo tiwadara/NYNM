@@ -47,12 +47,7 @@ class _ResolutionsState extends State<Resolutions> {
             Header(
               previous: Container(),
               title: "",
-              next: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.notifications,
-                    color: AppColors.white,
-                  )),
+              next: Container()
             ),
             Container(
               height: 200.h,

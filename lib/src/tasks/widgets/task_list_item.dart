@@ -27,86 +27,94 @@ class ResolutionListItem extends StatefulWidget {
 }
 
 class _ResolutionListItemState extends State<ResolutionListItem> {
-  TaskBloc _resolutionBloc;
+  TaskBloc _taskBloc;
   Task _updatedTask = Task();
   bool _value;
   @override
   void initState() {
-    _resolutionBloc = BlocProvider.of<TaskBloc>(context);
+    _taskBloc = BlocProvider.of<TaskBloc>(context);
     _updatedTask = widget.task;
     _value = widget.task.done;
     super.initState();
   }
 
+  getTask() {
+    _taskBloc.getTask(widget.year, widget.position).then((value) {
+      setState(() {
+        _updatedTask = value;
+        print("on task update" + _updatedTask.toJson().toString());
+      });
+      return null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskBloc, TaskState>(
-        buildWhen: (previous, current) => current is TaskUpdated,
-        builder: (context, state) {
+    return BlocListener<TaskBloc, TaskState>(
+        listenWhen: (previous, current) => current is TaskUpdated,
+        listener: (context, state) {
           if (state is TaskUpdated) {
-            _updatedTask = state.task;
+            getTask();
           }
-          return Row(
-            children: [
-              SizedBox(
-                width: 20,
-              ),
-              SizedBox(
-                width: 20,
-                height: 20,
-                child: Checkbox(
-                  onChanged: (bool value) {
-                    setState(() {
-                      _value = value;
-                    });
-                    _updatedTask.done = value;
-                    _resolutionBloc.add(UpdateTaskStatus(
-                        _updatedTask, widget.year, widget.position));
-                  },
-                  value: _value,
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 2),
-                  padding: EdgeInsets.all(10),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                widget.task.name,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textColor),
-                              ),
-                              Text(widget.task.description),
-                            ],
-                          ),
+        } , child:  Row(
+      children: [
+        SizedBox(
+          width: 20,
+        ),
+        SizedBox(
+          width: 20,
+          height: 20,
+          child: Checkbox(
+            onChanged: (bool value) {
+              setState(() {
+                _value = value;
+              });
+              _updatedTask.done = value;
+              _taskBloc.add(UpdateTaskStatus(_updatedTask, widget.year, widget.position));
+            },
+            value: _value,
+          ),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 2),
+            padding: EdgeInsets.all(10),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.task.name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textColor),
                         ),
-                        SizedBox(
-                          width: 10,
-                        )
+                        Text(widget.task.description),
                       ],
                     ),
                   ),
-                  decoration: BoxDecoration(
-                    color: widget.position.isEven
-                        ? AppColors.borderGrey.withOpacity(0.2)
-                        : AppColors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                  SizedBox(
+                    width: 10,
+                  )
+                ],
               ),
-            ],
-          );
-        });
+            ),
+            decoration: BoxDecoration(
+              color: widget.position.isEven
+                  ? AppColors.borderGrey.withOpacity(0.2)
+                  : AppColors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+      ],
+    ));
   }
 }

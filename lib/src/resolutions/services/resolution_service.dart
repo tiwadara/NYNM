@@ -23,8 +23,7 @@ class ResolutionService {
 
   Future<List<Resolution>> getAllResolution() async {
     List<Resolution> resolutions = List<Resolution>.empty(growable: true);
-    Box resolutionBox =
-        await storageService.openBox(StorageConstants.RESOLUTION_BOX);
+    Box resolutionBox = await storageService.openBox(StorageConstants.RESOLUTION_BOX);
     resolutions.addAll(resolutionBox.values.map((e) => e));
     return resolutions;
   }

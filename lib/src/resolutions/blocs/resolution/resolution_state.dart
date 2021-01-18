@@ -20,23 +20,10 @@ class LoadingResolution extends ResolutionState {
   List<Object> get props => [];
 }
 
-class UpdatingResolution extends ResolutionState {
-  @override
-  List<Object> get props => [];
-}
-
 @immutable
 class ResolutionSaved extends ResolutionState {
   final Resolution resolution;
   ResolutionSaved(this.resolution);
-  @override
-  List<Object> get props => [resolution];
-}
-
-@immutable
-class ResolutionUpdated extends ResolutionState {
-  final Resolution resolution;
-  ResolutionUpdated(this.resolution);
   @override
   List<Object> get props => [resolution];
 }

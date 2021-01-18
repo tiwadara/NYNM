@@ -20,18 +20,26 @@ class TaskService {
   }
 
   Future<dynamic> getAllTasks(int year) async {
-    Box taskBox = await storageService.openBox(StorageConstants.TASK_BOX);
+    Box taskBox = await Hive.openBox(StorageConstants.TASK_BOX);
     var tasks =
         await taskBox.get(year, defaultValue: List<Task>.empty(growable: true));
     return tasks;
   }
 
+  Future<dynamic> getTask(int year, int index) async {
+    Box taskBox = await Hive.openBox(StorageConstants.TASK_BOX);
+    List tasks =
+        await taskBox.get(year, defaultValue: List<Task>.empty(growable: true));
+    return tasks.elementAt(index);
+  }
+
   Future<Task> updateTask(Task task, int year, int index) async {
-    Box taskBox = await storageService.openBox(StorageConstants.TASK_BOX);
+    Box taskBox = await Hive.openBox(StorageConstants.TASK_BOX);
     List tasks =
         await taskBox.get(year, defaultValue: List<Task>.empty(growable: true));
     await tasks.removeAt(index);
     tasks.insert(index, task);
+    await taskBox.delete(year);
     await taskBox.put(year, tasks);
     return task;
   }

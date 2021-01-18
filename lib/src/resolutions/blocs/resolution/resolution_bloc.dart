@@ -25,8 +25,6 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
         var response = await resolutionService.saveResolution(event.resolution);
         if (response is Resolution) {
           yield ResolutionSaved(response);
-        } else {
-          yield ResolutionErrorState(AppStringConstants.saveFailed);
         }
       } catch (e) {
         yield ResolutionErrorState(AppStringConstants.saveFailed);
@@ -37,8 +35,6 @@ class ResolutionBloc extends Bloc<ResolutionEvent, ResolutionState> {
         var response = await resolutionService.getAllResolution();
         if (response is List<Resolution>) {
           yield ResolutionsReceived(response);
-        } else {
-          yield ResolutionErrorState(AppStringConstants.saveFailed);
         }
       } catch (e) {
         yield ResolutionErrorState(AppStringConstants.saveFailed);

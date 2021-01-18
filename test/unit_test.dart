@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
@@ -28,37 +29,39 @@ main() {
   // **************  UNIT TESTS ***********************
 
   // unit test Services
-  // group('ResolutionService Test | ', () {
-  //   ResolutionService resolutionService;
-  //   StorageService storageService;
-  //   Box box;
-  //
-  //   setUp(() async {
-  //     storageService = MockStorageService();
-  //     box = MockHiveBox();
-  //     resolutionService = ResolutionService(storageService);
-  //   });
-  //
-  //   test('Constructing Service should find correct dependencies', () {
-  //     expect(resolutionService != null, true);
-  //     expect(storageService != null, true);
-  //   });
-  //
-  //   test('save resolution when resolution year is new', () async {
-  //     Resolution testResolution = Resolution(motto: "Two", year: 2021);
-  //     when(storageService.openBox(any)).thenAnswer((_) => Future.value(box));
-  //     when(box.get(any)).thenAnswer((_) => Future.value(box));
-  //     // when(resolutionService.resolutionExists(testResolution)).thenAnswer((_) => Future.value(true));
-  //
-  //     Resolution newResolution = await resolutionService.saveResolution(Resolution(motto: "One", year: 2021));
-  //     expect(newResolution, testResolution);
-  //   });
-  //
-  //   test('get resolutions', () async {
-  //     List<Resolution> resolutions = await resolutionService.getAllResolution();
-  //     expect(resolutions, []);
-  //   });
-  // });
+  group('ResolutionService Test | ', () {
+    ResolutionService resolutionService;
+    StorageService storageService;
+    Box box;
+
+    setUp(() async {
+      storageService = MockStorageService();
+      box = MockHiveBox();
+      resolutionService = ResolutionService(storageService);
+    });
+
+    test('Constructing Service should find correct dependencies', () {
+      expect(resolutionService != null, true);
+      expect(storageService != null, true);
+    });
+
+    test('save resolution when resolution year is new', () async {
+      Resolution testResolution = Resolution(motto: "Two", year: 2021);
+      when(storageService.openBox(any)).thenAnswer((_) => Future.value(box));
+      when(box.get(any)).thenAnswer((_) => Future.value(box));
+      // when(resolutionService.resolutionExists(testResolution)).thenAnswer((_) => Future.value(true));
+
+      Resolution newResolution = await resolutionService.saveResolution(Resolution(motto: "One", year: 2021));
+      expect(newResolution, testResolution);
+    });
+
+    test('get resolutions', () async {
+      when(storageService.openBox(any)).thenAnswer((_) => Future.value(box));
+      when(box.get(any)).thenAnswer((_) => Future.value(box));
+      List<Resolution> resolutions = await resolutionService.getAllResolution();
+      expect(resolutions, []);
+    });
+  });
 
   // unit test blocs
 
@@ -97,8 +100,7 @@ main() {
       blocTest(
         'emits [SavingResolution, ResolutionErrorState] when SaveResolution is added and saveResolution fails',
         build: () {
-          when(resolutionService.saveResolution(testResolution))
-              .thenThrow((_) => Future.value("testResolution"));
+          when(resolutionService.saveResolution(testResolution)).thenThrow((_) => Future.value("error string"));
           return resolutionBloc;
         },
         act: (bloc) => bloc.add(SaveResolution(testResolution)),
@@ -106,6 +108,27 @@ main() {
           SavingResolution(),
           ResolutionErrorState(AppStringConstants.saveFailed)
         ],
+      );
+      blocTest(
+        'emits [LoadingResolution, ResolutionsReceived] when GetResolutions is added and getAllResolution succeeds',
+        build: () {
+          when(resolutionService.getAllResolution()).thenAnswer((_) => Future.value(List<Resolution>.empty()),
+          );
+          return resolutionBloc;
+        },
+        act: (bloc) => bloc.add(GetResolutions()),
+        expect: [LoadingResolution(), ResolutionsReceived(List<Resolution>.empty())],
+      );
+
+      blocTest(
+        'emits [LoadingResolution, ResolutionErrorState] when GetResolutions is added and getAllResolution fails',
+        build: () {
+          when(resolutionService.getAllResolution()).thenThrow((_) => Future.value("error string "),
+          );
+          return resolutionBloc;
+        },
+        act: (bloc) => bloc.add(GetResolutions()),
+        expect: [LoadingResolution(),  ResolutionErrorState(AppStringConstants.saveFailed)],
       );
     });
   });
@@ -153,6 +176,64 @@ main() {
         act: (bloc) => bloc.add(SaveTask(testTask, year)),
         expect: [SavingTask(), TaskErrorState(AppStringConstants.saveFailed)],
       );
+    });
+  });
+
+  // unit test models
+
+  group('ResolutionModel Test -', () {
+    Resolution resolution = Resolution();
+
+    test('Constructor should load model', () {
+      expect(resolution != null, true);
+    });
+
+    group('Convert modet to and from json -', () {
+      Resolution testModel = Resolution(year: 2020, motto: "test motto");
+      Map<String, dynamic> testJson = {"year": 2020, "motto": "test motto"};
+      test('expect exact value  when Model is passed  as json', () {
+        var newResolutionObjectFromTestJson = Resolution.fromJson(testJson);
+        expect(newResolutionObjectFromTestJson.toJson(), testJson);
+      });
+      test('check if any value in a model is null', () {
+        bool isNull = testModel.checkIfAnyIsNull();
+        expect(isNull, false);
+      });
+    });
+  });
+
+  group('TaskModel Test -', () {
+    Task task = Task();
+
+    test('Constructor should load model', () {
+      expect(task != null, true);
+    });
+
+    group('Convert model to and from json -', () {
+      Task monthlyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "MONTHLY");
+      Task weeklyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "WEEKLY");
+      Task dailyTestModel = Task(done: true, name : "test task name", description: "test description" , interval: "DAILY");
+      Map<String, dynamic> testJson = {"done": true, "name": "test task name", "description": "test description", "interval": "test Interval"};
+      test('expect exact value  when Model is passed  as json', () {
+        var newTaskObjectFromTestJson = Task.fromJson(testJson);
+        expect(newTaskObjectFromTestJson.toJson(), testJson);
+      });
+      test('check if any value in a model is null', () {
+        bool isNull = monthlyTestModel.checkIfAnyIsNull();
+        expect(isNull, false);
+      });
+      test('Interval matches expected Notification Repeat Monthly', () {
+        var returnedInterval = monthlyTestModel.getInterval();
+        expect(returnedInterval, RepeatInterval.everyMinute);
+      });
+      test('Interval matches expected Notification Repeat Daily', () {
+        var returnedInterval = dailyTestModel.getInterval();
+        expect(returnedInterval, RepeatInterval.daily);
+      });
+      test('Interval matches expected Notification Repeat Weekly', () {
+        var returnedInterval = weeklyTestModel.getInterval();
+        expect(returnedInterval, RepeatInterval.weekly);
+      });
     });
   });
 }
