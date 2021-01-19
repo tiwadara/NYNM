@@ -42,7 +42,6 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
     _taskBloc.getTask(widget.year, widget.position).then((value) {
       setState(() {
         _updatedTask = value;
-        print("on task update" + _updatedTask.toJson().toString());
       });
       return null;
     });

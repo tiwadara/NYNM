@@ -12,11 +12,9 @@ class ResolutionService {
     if (await resolutionExists(resolution)) {
       throw Error();
     } else {
-      Box resolutionBox =
-          await storageService.openBox(StorageConstants.RESOLUTION_BOX);
+      Box resolutionBox = await storageService.openBox(StorageConstants.RESOLUTION_BOX);
       await resolutionBox.put(resolution.year, resolution);
-      savedResolution =
-          resolutionBox.values.singleWhere((element) => element == resolution);
+      savedResolution = resolutionBox.values.singleWhere((element) => element == resolution);
     }
     return savedResolution;
   }
@@ -30,13 +28,13 @@ class ResolutionService {
 
   Future<bool> resolutionExists(Resolution resolution) async {
     bool exists = false;
-    // Box resolutionBox = await storageService.openBox(StorageConstants.RESOLUTION_BOX);
-    // resolutionBox.values.map((e) {
-    //   if (e.year == resolution.year) {
-    //     print("resolution exists");
-    //     exists = true;
-    //   }
-    // });
+    Box resolutionBox = await storageService.openBox(StorageConstants.RESOLUTION_BOX);
+    resolutionBox.values.map((e) {
+      if (e.year == resolution.year) {
+        print("resolution exists");
+        exists = true;
+      }
+    });
     return exists;
   }
 }

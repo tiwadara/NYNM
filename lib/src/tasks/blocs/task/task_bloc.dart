@@ -29,14 +29,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       }
     } else if (event is GetTasks) {
       yield LoadingTasks();
-      try {
-        var response = await taskService.getAllTasks(event.year);
-        if (response != null) {
-          yield TaskListReceived(response, event.year);
-        } else {
-          yield TaskErrorState(AppStringConstants.gettingFailed);
-        }
-      } catch (e) {
+      var response = await taskService.getAllTasks(event.year);
+      if (response != null) {
+        yield TaskListReceived(response, event.year);
+      } else {
         yield TaskErrorState(AppStringConstants.gettingFailed);
       }
     } else if (event is UpdateTaskStatus) {
@@ -44,7 +40,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       Task response = await taskService.updateTask(
           event.resolution, event.year, event.index);
       if (response is Task) {
-        yield TaskUpdated(response);
+        yield TaskUpdated();
       } else {
         yield TaskErrorState(AppStringConstants.saveFailed);
       }
@@ -58,7 +54,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   Future<int> getCompletedTaskCount(int year) async {
     List tasks = await taskService.getAllTasks(year);
-    tasks= tasks.where((element) => element.done ?? false ).toList();
+    tasks = tasks.where((element) => element.done ?? false).toList();
     return tasks.length;
   }
 

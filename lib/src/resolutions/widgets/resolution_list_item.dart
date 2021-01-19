@@ -40,14 +40,12 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
   getCount() {
     _taskBloc.getTaskCount(widget.resolution.year).then((value) {
       setState(() {
-        print("taskss" + value.toString());
         _taskCount = value;
       });
       return null;
     });
     _taskBloc.getCompletedTaskCount(widget.resolution.year).then((value) {
       setState(() {
-        print("commm" + value.toString());
         _completedTaskCount = value;
       });
       return null;
@@ -131,7 +129,7 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                               color: AppColors.primaryDark),
                         ),
                         Text(
-                         '${(_completedTaskCount/_taskCount * 100) ?? 0.floor()}' + "% done",
+                         '${ ((_completedTaskCount ?? 0) /(_taskCount ?? 0 )* 100).isNaN ? "0" : ((_completedTaskCount ?? 0) /(_taskCount ?? 0 )* 100).floor().toString()}' + "% done",
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -143,9 +141,7 @@ class _ResolutionListItemState extends State<ResolutionListItem> {
                 ),
               ),
               decoration: BoxDecoration(
-                color: widget.position.isEven
-                    ? AppColors.borderGrey.withOpacity(0.2)
-                    : AppColors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

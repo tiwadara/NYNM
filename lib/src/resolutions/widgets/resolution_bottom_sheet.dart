@@ -8,7 +8,6 @@ import 'package:resolution/src/commons/constants/app_colors.dart';
 import 'package:resolution/src/commons/constants/app_constants.dart';
 import 'package:resolution/src/commons/constants/app_strings.dart';
 import 'package:resolution/src/commons/widgets/app_horizontal_line.dart';
-import 'package:resolution/src/commons/widgets/app_loader.dart';
 import 'package:resolution/src/commons/widgets/app_snackbar.dart';
 import 'package:resolution/src/commons/widgets/app_text_view.dart';
 import 'package:resolution/src/commons/widgets/primary_button.dart';
@@ -139,10 +138,8 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
                     },
                     listener: (context, state) {
                       if (state is ResolutionErrorState) {
-                        Navigator.pop(context);
                         AppSnackBar().show(message: state.error);
                       } else if (state is ResolutionSaved) {
-                        Navigator.pop(context);
                         AppSnackBar().show(message: "Resolution Created");
                         Navigator.pop(context);
                       }
@@ -161,7 +158,6 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
   }
 
   void watchFormState() {
-    print("event" + resolution.toString());
     if (resolution.checkIfAnyIsNull()) {
       setState(() => isButtonDisabled = true);
     } else {
@@ -172,7 +168,6 @@ class _NewResolutionBottomSheetState extends State<NewResolutionBottomSheet> {
   void saveResolution() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      showOverlay(context, "Creating Resolution");
       _resolutionBloc.add(SaveResolution(resolution));
     } else {
       AppSnackBar().show(message: AppStringConstants.formError);

@@ -33,10 +33,8 @@ class TaskSaved extends TaskState {
 
 @immutable
 class TaskUpdated extends TaskState {
-  final Task task;
-  TaskUpdated(this.task);
   @override
-  List<Object> get props => [task];
+  List<Object> get props => [];
 }
 
 @immutable

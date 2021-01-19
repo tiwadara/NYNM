@@ -11,11 +11,10 @@ class TaskService {
 
   Future<Task> saveTask(Task task, int year) async {
     Box taskBox = await storageService.openBox(StorageConstants.TASK_BOX);
-    List tasks =
-        await taskBox.get(year, defaultValue: List<Task>.empty(growable: true));
+    List tasks = await taskBox.get(year, defaultValue: List<Task>.empty(growable: true));
     tasks.add(task);
     await taskBox.put(year, tasks);
-    notificationService.periodicNotification(task);
+    notificationService.periodicNotification(task, tasks.indexWhere((element) => element == task));
     return task;
   }
 
